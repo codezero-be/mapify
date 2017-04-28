@@ -111,17 +111,7 @@
         },
 
         setMapOptions: function () {
-            // If there is no center point yet, use the first marker.
-            if ( ! this.options.centerLat || ! this.options.centerLng) {
-                if (this.markers.length === 0) {
-                    console.error('Could not set a center position on the map.');
-                }
-
-                this.setCenterCoordinates(
-                    this.markers[0].position.lat(),
-                    this.markers[0].position.lng()
-                );
-            }
+            this.setDefaultCenterCoordinatesIfNotExist();
 
             this.map.setOptions(
                 this.removeEmptyObjectProperties({
@@ -130,6 +120,21 @@
                     scrollwheel: this.options.scrollwheel
                 })
             );
+        },
+
+        setDefaultCenterCoordinatesIfNotExist: function () {
+            if ( ! this.options.centerLat || ! this.options.centerLng) {
+                if (this.markers.length === 0) {
+                    return console.error('Could not set a center position on the map.');
+                }
+
+                // If there is no center point yet,
+                // use the first marker.
+                this.setCenterCoordinates(
+                    this.markers[0].position.lat(),
+                    this.markers[0].position.lng()
+                );
+            }
         },
 
         setCenterCoordinates: function (lat, lng) {
