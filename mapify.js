@@ -71,9 +71,7 @@
         },
 
         createMarkers: function () {
-            var normalizedMarkers = this.normalizeMarkers();
-
-            $.each(normalizedMarkers, function (index, markerOptions) {
+            $.each(this.normalizeMarkerOptions(), function (index, markerOptions) {
                 this.createMarker(markerOptions);
             }.bind(this));
 
@@ -86,15 +84,25 @@
         },
 
         createMarker: function (markerOptions) {
-            var marker = new google.maps.Marker(markerOptions);
-            this.markers.push(marker);
+            var marker = new google.maps.Marker(
+                this.removeEmptyObjectProperties({
+                    position: this.createLatLng(markerOptions.lat, markerOptions.lng),
+                    icon: this.normalizeIcon(markerOptions),
+                    label: markerOptions.label,
+                    title: markerOptions.title,
+                    map: this.map
+                })
+            );
 
             if (this.isUsingMarkerElements()) {
+                marker.$marker = markerOptions.$marker;
                 markerOptions.$marker.data('marker', marker);
             }
 
+            this.markers.push(marker);
+
             if (markerOptions.center === true) {
-                this.setMarkerAsCenter(markerOptions);
+                this.setCenterCoordinates(markerOptions.lat, markerOptions.lng);
             }
 
             marker.addListener('click',     function(event) { this.onMarkerClick(marker, event);      }.bind(this));
@@ -109,7 +117,10 @@
                     console.error('Could not set a center position on the map.');
                 }
 
-                this.setMarkerAsCenter(this.markers[0]);
+                this.setCenterCoordinates(
+                    this.markers[0].position.lat(),
+                    this.markers[0].position.lng()
+                );
             }
 
             this.map.setOptions(
@@ -121,16 +132,16 @@
             );
         },
 
-        setMarkerAsCenter: function (marker) {
-            this.options.centerLat = marker.position.lat();
-            this.options.centerLng = marker.position.lng();
+        setCenterCoordinates: function (lat, lng) {
+            this.options.centerLat = lat;
+            this.options.centerLng = lng;
         },
 
         //
-        // Normalize Markers
+        // Normalize Marker Options
         //
 
-        normalizeMarkers: function () {
+        normalizeMarkerOptions: function () {
             if (this.mapHasSingleMarkerCoords()) {
                 return [this.normalizeMarkerElement(this.$map)];
             }
@@ -139,17 +150,11 @@
                 return this.normalizeMarkerElements();
             }
 
-            return this.normalizeMarkerObjects();
-        },
+            if (this.isArray(this.optios.markers)) {
+                return this.options.markers;
+            }
 
-        normalizeMarkerObjects: function () {
-            var markers = [];
-
-            $.each(this.options.markers || [], function (index, marker) {
-                markers.push(this.normalizeMarkerObject(marker));
-            }.bind(this));
-
-            return markers;
+            return [];
         },
 
         normalizeMarkerElements: function () {
@@ -162,35 +167,27 @@
             return markers;
         },
 
-        normalizeMarkerObject: function (marker) {
-            return this.removeEmptyObjectProperties({
-                position: this.createLatLng(marker.lat, marker.lng),
-                center: marker.center,
-                icon: this.normalizeIcon(marker),
-                label: marker.label,
-                title: marker.title,
-                map: this.map
-            });
-        },
-
         normalizeMarkerElement: function ($marker) {
             return this.removeEmptyObjectProperties({
-                position: this.createLatLng($marker.data('lat'), $marker.data('lng')),
+                lat: $marker.data('lat'),
+                lng: $marker.data('lng'),
                 center: $marker.data('center'),
-                icon: this.normalizeIcon($marker),
+                icon: $marker.data('icon'),
+                iconSize: $marker.data('icon-size'),
+                iconOrigin: $marker.data('icon-origin'),
+                iconAnchor: $marker.data('icon-anchor'),
                 label: $marker.data('label'),
                 title: $marker.data('title'),
-                map: this.map,
                 $marker: $marker
             });
         },
 
-        normalizeIcon: function (source) {
+        normalizeIcon: function (markerOptions) {
             var icon = this.removeEmptyObjectProperties({
-                url:                         source.icon       || source.data('icon')        || this.options.icon,
-                scaledSize: this.createSize( source.iconSize   || source.data('icon-size')   || this.options.iconSize),
-                origin:     this.createPoint(source.iconOrigin || source.data('icon-origin') || this.options.iconOrigin),
-                anchor:     this.createPoint(source.iconAnchor || source.data('icon-anchor') || this.options.iconAnchor)
+                url:                         markerOptions.icon       || this.options.icon,
+                scaledSize: this.createSize( markerOptions.iconSize   || this.options.iconSize),
+                origin:     this.createPoint(markerOptions.iconOrigin || this.options.iconOrigin),
+                anchor:     this.createPoint(markerOptions.iconAnchor || this.options.iconAnchor)
             });
 
             return icon.url ? icon : null;
@@ -250,6 +247,10 @@
 
         isString: function (value) {
             return typeof value === 'string' || value instanceof String;
+        },
+
+        isArray: function (value) {
+            return value.constructor === Array;
         },
 
         splitValues: function (values) {
