@@ -60,11 +60,11 @@
         init: function () {
             this.createMap();
             this.createMarkers();
-            this.centerMap();
+            this.setMapOptions();
         },
 
         createMap: function () {
-            this.map = new google.maps.Map(this.mapContainer, this.normalizeMapOptions());
+            this.map = new google.maps.Map(this.mapContainer);
             this.map.addListener('click', this.onMapClick.bind(this));
             this.map.$map = this.$map;
             this.$map.data('map', this.map);
@@ -102,7 +102,7 @@
             marker.addListener('mouseout',  function(event) { this.onMarkerMouseLeave(marker, event); }.bind(this));
         },
 
-        centerMap: function () {
+        setMapOptions: function () {
             // If there is no center point yet, use the first marker.
             if ( ! this.options.centerLat || ! this.options.centerLng) {
                 if (this.markers.length === 0) {
@@ -112,8 +112,12 @@
                 this.setMarkerAsCenter(this.markers[0]);
             }
 
-            this.map.setCenter(
-                this.createLatLng(this.options.centerLat, this.options.centerLng)
+            this.map.setOptions(
+                this.removeEmptyObjectProperties({
+                    center: this.createLatLng(this.options.centerLat, this.options.centerLng),
+                    zoom: this.options.zoom,
+                    scrollwheel: this.options.scrollwheel
+                })
             );
         },
 
@@ -123,7 +127,7 @@
         },
 
         //
-        // Normalize Marker & Map Options
+        // Normalize Markers
         //
 
         normalizeMarkers: function () {
@@ -190,13 +194,6 @@
             });
 
             return icon.url ? icon : null;
-        },
-
-        normalizeMapOptions: function () {
-            return this.removeEmptyObjectProperties({
-                zoom: this.options.zoom,
-                scrollwheel: this.options.scrollwheel
-            });
         },
 
         //
