@@ -229,6 +229,65 @@ With a data attribute:
 <div class="map" data-zoom="8" data-scrollwheel="true"></div>
 ```
 
+### Fit Markers in Map
+
+You can automatically zoom the map to bring all or some markers within the map's boundaries.
+
+#### Fit all markers in the map
+
+With the `fitboundsPadding` option, you can add some minimum spacing (in pixels) between the map's border and the markers. The default is `20` pixels. This option can only be set on the map, as it doesn't make sense to set in on multiple markers.
+
+With javascript:
+
+```javascript
+$('.map').mapify({
+    fitbounds: true,
+    fitboundsPadding: 50
+});
+```
+
+With a data attribute:
+
+```html
+<div class="map" data-fitbounds="true" data-fitbounds-padding="50"></div>
+```
+
+#### Fit specific markers in the map
+
+With javascript:
+
+```javascript
+$('.map').mapify({
+    markers: [
+        { lat: 51.251245, lng: 4.497890, fitbounds: true },
+        { lat: 50.963258, lng: 3.706874, fitbounds: true }
+    ]
+});
+```
+
+With a data attribute:
+
+````html
+<ul id="map-markers">
+    <li class="marker"
+        data-lat="51.251245"
+        data-lng="4.497890"
+        data-fitbounds="true">
+        Marker A
+    </li>
+    <li class="marker"
+        data-lat="50.963258"
+        data-lng="3.706874"
+        data-fitbounds="true">
+        Marker B
+    </li>
+</ul>
+````
+
+>   By using `fitbounds` you are overriding the `zoom` level and `center` poisition. Those settings will be ignored by Google Maps.
+
+>   **Note from Google Maps Reference:** When the map is set to `display: none`, the `fitBounds` function reads the map's size as 0x0, and therefore does not do anything. To change the viewport while the map is hidden, set the map to `visibility: hidden`, thereby ensuring the map div has an actual size.
+
 ### Custom Marker Icons
 
 To use a custom image as a marker, set one or more of the following options:

@@ -20,7 +20,7 @@
 
 <h2>Map with Multiple Markers</h2>
 
-<div class="map" data-markers="#map1-markers .marker"></div>
+<div class="map" data-markers="#map1-markers .marker" data-fitbounds="true"></div>
 
 <ul id="map1-markers">
     <li class="marker" data-lat="51.251245" data-lng="4.497890">
@@ -35,7 +35,7 @@
 
 <div class="map"
      data-markers="#map2-markers .marker"
-     data-zoom="10"
+     data-zoom="16"
      data-scrollwheel="true"
      data-center-lat="51.251245"
      data-center-lng="4.497890"
@@ -57,6 +57,15 @@
     <li class="marker"
         data-lat="51.172364"
         data-lng="4.336061"
+        data-fitbounds="true"
+        data-center="true"
+        data-label="A"
+        data-title="Hello World">
+        <a href="#">marker</a>
+    </li>
+    <li class="marker"
+        data-lat="50.421853"
+        data-lng="4.445815"
         data-center="true"
         data-label="A"
         data-title="Hello World">

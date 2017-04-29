@@ -22,6 +22,8 @@
             // 20: Buildings
             zoom: 10,
             scrollwheel: false, //=> zoom with the mouse scrollwheel
+            fitbounds: false, //=> fit all markers on the map?
+            fitboundsPadding: 20, //=> minimum space between map borders and markers
 
             icon: null, //=> a "data-icon" on a marker will override any default icon
             iconSize: null, //=> optional
@@ -51,6 +53,7 @@
 
         this.map = null; //=> Google Map object
         this.markers = []; //=> Google Marker objects
+        this.bounds = []; //=> Google Marker objects that should fit in the map
 
         this.init();
     }
@@ -99,6 +102,10 @@
                 markerOptions.$marker.data('marker', marker);
             }
 
+            if (this.options.fitbounds === true || markerOptions.fitbounds === true) {
+                this.bounds.push(marker);
+            }
+
             this.markers.push(marker);
 
             if (markerOptions.center === true) {
@@ -120,6 +127,8 @@
                     scrollwheel: this.options.scrollwheel
                 })
             );
+
+            this.fitBounds();
         },
 
         setDefaultCenterCoordinatesIfNotExist: function () {
@@ -140,6 +149,18 @@
         setCenterCoordinates: function (lat, lng) {
             this.options.centerLat = lat;
             this.options.centerLng = lng;
+        },
+
+        fitBounds: function () {
+            if (this.bounds.length > 0) {
+                var bounds = new google.maps.LatLngBounds();
+
+                $.each(this.bounds, function (index, marker) {
+                    bounds.extend(marker.position);
+                });
+
+                this.map.fitBounds(bounds, this.options.fitboundsPadding);
+            }
         },
 
         //
@@ -177,6 +198,7 @@
                 lat: $marker.data('lat'),
                 lng: $marker.data('lng'),
                 center: $marker.data('center'),
+                fitbounds: $marker.data('fitbounds'),
                 icon: $marker.data('icon'),
                 iconSize: $marker.data('icon-size'),
                 iconOrigin: $marker.data('icon-origin'),
@@ -207,6 +229,8 @@
                 markers: this.$map.data('markers'),
                 zoom: this.$map.data('zoom'),
                 scrollwheel: this.$map.data('scrollwheel'),
+                fitbounds: this.$map.data('fitbounds'),
+                fitboundsPadding: this.$map.data('fitbounds-padding'),
                 lat: this.$map.data('lat'),
                 lng: this.$map.data('lng'),
                 centerLat: this.$map.data('center-lat') || this.$map.data('lat'),
