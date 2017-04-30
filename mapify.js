@@ -23,7 +23,7 @@
             zoom: 10,
             scrollwheel: false, //=> zoom with the mouse scrollwheel
             fitbounds: false, //=> fit all markers on the map?
-            fitboundsPadding: 20, //=> minimum space between map borders and markers
+            fitboundsPadding: 50, //=> stop zooming in as soon as a markers gets in the padding zone
 
             icon: null, //=> a "data-icon" on a marker will override any default icon
             iconSize: null, //=> optional

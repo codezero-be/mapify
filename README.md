@@ -235,7 +235,7 @@ You can automatically zoom the map to bring all or some markers within the map's
 
 #### Fit all markers in the map
 
-With the `fitboundsPadding` option, you can add some minimum spacing (in pixels) between the map's border and the markers. The default is `20` pixels. This option can only be set on the map, as it doesn't make sense to set in on multiple markers.
+The `fitboundsPadding` option is not well documented by Google, but after some experimenting with it seems to work as follows… You set a pixel value that adds a "padding zone" to the map's boundaries. Google Maps will keep zooming in until one of your markers gets within the padding zone. The default value is `50`. This option can only be set on the map, as it doesn't make sense to set in on multiple markers.
 
 With javascript:
 
