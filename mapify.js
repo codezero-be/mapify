@@ -20,9 +20,9 @@
             // 10: City
             // 15: Streets
             // 20: Buildings
-            zoom: 10,
+            zoom: 15,
             scrollwheel: false, //=> zoom with the mouse scrollwheel
-            fitbounds: false, //=> fit all markers on the map?
+            fitbounds: true, //=> fit all markers on the map?
             fitboundsPadding: 50, //=> stop zooming in as soon as a markers gets in the padding zone
 
             icon: null, //=> a "data-icon" on a marker will override any default icon
@@ -103,7 +103,15 @@
                 markerOptions.$marker.data('marker', marker);
             }
 
-            if (this.options.fitbounds === true || markerOptions.fitbounds === true) {
+            // When fitbounds is true for a specific marker,
+            // and global fitbounds is also still true (by default),
+            // set global fitbounds to false and reset the bounds array.
+            if (markerOptions.fitbounds === true && this.options.fitbounds === true) {
+                this.options.fitbounds = false;
+                this.bounds = [];
+            }
+
+            if (markerOptions.fitbounds === true || this.options.fitbounds === true) {
                 this.bounds.push(marker);
             }
 
@@ -151,7 +159,9 @@
         },
 
         fitBounds: function () {
-            if (this.bounds.length > 0) {
+            // Only use fitBounds when there is
+            // more than one marker.
+            if (this.bounds.length > 1) {
                 var bounds = new google.maps.LatLngBounds();
 
                 $.each(this.bounds, function (index, marker) {

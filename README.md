@@ -135,9 +135,92 @@ The HTML marker elements could look like this minimal setup:
 
 ## Options
 
+### Fit All Markers on the Map
+
+**Default:** `false` if only 1 marker, `true` if more than 1 marker
+
+Most likely you will want all of your markers to show up on the map initially. So if you add more than one marker, the `fitbounds` option is set to `true` by default. This will override any zoom level and center position you have set. If you do want to take control over this yourself, you can set `fitbounds` to `false`.
+
+With javascript:
+
+```javascript
+$('.map').mapify({
+    fitbounds: false
+});
+```
+
+With a data attribute:
+
+```html
+<div class="map" data-fitbounds="false"></div>
+```
+
+If you only have one marker, the map will be zoomed and centered on that marker. See below for more information about those settings.
+
+### Fit Specific Markers on the Map
+
+**Default:** `true` for all markers
+
+If you only want to zoom in on a few important markers initially, you can add a `fitbounds` option only to those markers. You don't have to disable `fitbounds` on the map, this is done automatically when the option is detected on a marker.
+
+With javascript:
+
+```javascript
+$('.map').mapify({
+    markers: [
+        { lat: 51.251245, lng: 4.497890, fitbounds: true },
+        { lat: 50.963258, lng: 3.706874, fitbounds: true }
+    ]
+});
+```
+
+With a data attribute:
+
+````html
+<ul id="map-markers">
+    <li class="marker"
+        data-lat="51.251245"
+        data-lng="4.497890"
+        data-fitbounds="true">
+        Marker A
+    </li>
+    <li class="marker"
+        data-lat="50.963258"
+        data-lng="3.706874"
+        data-fitbounds="true">
+        Marker B
+    </li>
+</ul>
+````
+
+>   **Note from Google Maps Reference:** When the map is set to `display: none`, the `fitBounds` function reads the map's size as 0x0, and therefore does not do anything. To change the viewport while the map is hidden, set the map to `visibility: hidden`, thereby ensuring the map div has an actual size.
+
+### Fit Markers on the Map with Extra Padding
+
+**Default:** `50`
+
+The `fitboundsPadding` option is not well documented by Google, but after some experimenting it seems to work as follows… You set a pixel value that adds a "padding zone" to the map's boundaries. Google Maps will keep zooming in until one of your markers gets within the padding zone. This option can only be set on the map, as it doesn't make sense to set in on multiple markers.
+
+With javascript:
+
+```javascript
+$('.map').mapify({
+    fitbounds: true,
+    fitboundsPadding: 50
+});
+```
+
+With a data attribute:
+
+```html
+<div class="map" data-fitbounds="true" data-fitbounds-padding="50"></div>
+```
+
 ### Map Center Position
 
-By default the map will be centered on on the first (or only) marker's `lat` and `lng` coordinates.
+**Default:** first marker's position
+
+When the `fitbounds` option is set to `false`, the map will be centered on on the first (or only) marker's `lat` and `lng` coordinates by default.
 
 You can override the default center point in a few ways.
 
@@ -204,13 +287,33 @@ Or by adding a `data-center` attribute to a marker element:
 
 ### Zoom Level
 
-The zoom level can be set to a value between 1 and 20, where 1 is the most zoomed out.
+**Default:** `15`
+
+The initial zoom level can be set to a value between 1 and 20, where 1 is the most zoomed out. This option has no effect while the `fitbounds` option is set to `true`.
 
 - 1: World
 - 5: Landmass/continent
-- 10: City **( = default)**
+- 10: City
 - 15: Streets
 - 20: Buildings
+
+With javascript:
+
+```javascript
+$('.map').mapify({
+    zoom: 8
+});
+```
+
+With a data attribute:
+
+```html
+<div class="map" data-zoom="8"></div>
+```
+
+### Zoom on Scroll
+
+**Default:** `false`
 
 To enable zooming with the scrollwheel of the mouse, set the `scrollwheel` option to `true`.
 
@@ -218,7 +321,6 @@ With javascript:
 
 ```javascript
 $('.map').mapify({
-    zoom: 8,
     scrollwheel: true
 });
 ```
@@ -226,69 +328,12 @@ $('.map').mapify({
 With a data attribute:
 
 ```html
-<div class="map" data-zoom="8" data-scrollwheel="true"></div>
+<div class="map" data-scrollwheel="true"></div>
 ```
-
-### Fit Markers in Map
-
-You can automatically zoom the map to bring all or some markers within the map's boundaries.
-
-#### Fit all markers in the map
-
-The `fitboundsPadding` option is not well documented by Google, but after some experimenting with it seems to work as follows… You set a pixel value that adds a "padding zone" to the map's boundaries. Google Maps will keep zooming in until one of your markers gets within the padding zone. The default value is `50`. This option can only be set on the map, as it doesn't make sense to set in on multiple markers.
-
-With javascript:
-
-```javascript
-$('.map').mapify({
-    fitbounds: true,
-    fitboundsPadding: 50
-});
-```
-
-With a data attribute:
-
-```html
-<div class="map" data-fitbounds="true" data-fitbounds-padding="50"></div>
-```
-
-#### Fit specific markers in the map
-
-With javascript:
-
-```javascript
-$('.map').mapify({
-    markers: [
-        { lat: 51.251245, lng: 4.497890, fitbounds: true },
-        { lat: 50.963258, lng: 3.706874, fitbounds: true }
-    ]
-});
-```
-
-With a data attribute:
-
-````html
-<ul id="map-markers">
-    <li class="marker"
-        data-lat="51.251245"
-        data-lng="4.497890"
-        data-fitbounds="true">
-        Marker A
-    </li>
-    <li class="marker"
-        data-lat="50.963258"
-        data-lng="3.706874"
-        data-fitbounds="true">
-        Marker B
-    </li>
-</ul>
-````
-
->   By using `fitbounds` you are overriding the `zoom` level and `center` poisition. Those settings will be ignored by Google Maps.
-
->   **Note from Google Maps Reference:** When the map is set to `display: none`, the `fitBounds` function reads the map's size as 0x0, and therefore does not do anything. To change the viewport while the map is hidden, set the map to `visibility: hidden`, thereby ensuring the map div has an actual size.
 
 ### Custom Marker Icons
+
+**Default:** standard Google icons
 
 To use a custom image as a marker, set one or more of the following options:
 
@@ -350,6 +395,8 @@ On a marker element:
 ````
 
 ### Marker Label and Title
+
+**Default:** none
 
 The label is some text that is shown on a marker image. The title is a small tooltip that appears when you hover over a marker and is basically the same as a normal `title` HTML attribute.
 
