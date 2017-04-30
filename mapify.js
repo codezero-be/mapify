@@ -64,6 +64,7 @@
             this.createMap();
             this.createMarkers();
             this.setMapOptions();
+            this.fitBounds();
         },
 
         createMap: function () {
@@ -118,20 +119,16 @@
         },
 
         setMapOptions: function () {
-            this.setDefaultCenterCoordinatesIfNotExist();
-
             this.map.setOptions(
                 this.removeEmptyObjectProperties({
-                    center: this.createLatLng(this.options.centerLat, this.options.centerLng),
+                    center: this.getMapCenterPosition(),
                     zoom: this.options.zoom,
                     scrollwheel: this.options.scrollwheel
                 })
             );
-
-            this.fitBounds();
         },
 
-        setDefaultCenterCoordinatesIfNotExist: function () {
+        getMapCenterPosition: function () {
             if ( ! this.options.centerLat || ! this.options.centerLng) {
                 if (this.markers.length === 0) {
                     return console.error('Could not set a center position on the map.');
@@ -144,6 +141,8 @@
                     this.markers[0].position.lng()
                 );
             }
+
+            return this.createLatLng(this.options.centerLat, this.options.centerLng);
         },
 
         setCenterCoordinates: function (lat, lng) {
