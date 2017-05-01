@@ -38,7 +38,7 @@
             clusterMaxZoom: 15, //=> stop clustering when zoomed in to this level
             clusterZoomOnClick: true,
             clusterRetina: true,
-            clusterIcon: 'cluster.png',
+            clusterIcon: '/images/cluster.png',
             clusterIconSize: '50,50', //=> should be actual icon size or the text will be positioned wrong
             clusterTextColor: '#ffffff',
             clusterTextSize: 12,

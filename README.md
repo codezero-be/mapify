@@ -16,7 +16,7 @@ npm install codezero-mapify --save
 
 ### Include Scripts
 
-You will need to [create an API key](https://developers.google.com/maps/documentation/javascript/get-api-key) to work with the Google Maps API.
+You probably want to [create an API key](https://developers.google.com/maps/documentation/javascript/get-api-key) to work with the Google Maps API. You can use the API without a key, but there will be a warning in the console window.
 
 ```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -313,6 +313,8 @@ If this is `true`, sprites cannot be used as cluster icons (advanced).
 ### Cluster Icons
 
 #### Change Icon
+
+**Default:** `/images/cluster.png`
 
 You can change the default cluster icon by setting a few basic options.
 

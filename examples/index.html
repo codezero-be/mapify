@@ -39,17 +39,16 @@
      data-scrollwheel="true"
      data-center-lat="51.251245"
      data-center-lng="4.497890"
-     data-icon="marker1.png"
+     data-icon="/examples/example-marker.png"
      data-icon-size="40,40"
      data-icon-origin="0,0"
-     data-icon-anchor="0,20">
+     data-icon-anchor="20,40">
 </div>
 
 <ul id="map2-markers">
     <li class="marker"
         data-lat="51.251245"
         data-lng="4.497890"
-        data-icon="marker2.png"
         data-label="A"
         data-title="Hello World">
         <a href="#">marker</a>
@@ -73,7 +72,8 @@
 </ul>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="mapify.js"></script>
+<script src="../src/vendor/markerclusterer.js"></script>
+<script src="../src/mapify.core.js"></script>
 
 <script>
     function initMap() {
@@ -81,7 +81,6 @@
             onMarkerClick: function (marker, map, event) {
                 console.log('clicked', marker, map);
             },
-
             onClusterClick: function (markers, cluster, map) {
                 console.log('click', markers, cluster, map);
             },
@@ -95,8 +94,7 @@
     }
 </script>
 
-<script src="markerclusterer.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=<?= GOOGLE_API_KEY ?>&callback=initMap" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script>
 
 </body>
 </html>
