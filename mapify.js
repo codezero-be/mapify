@@ -60,7 +60,10 @@
             onMarkerMouseLeave:       function (marker, map, event) { },
             onMarkerLegendClick:      function (marker, map, event) { },
             onMarkerLegendMouseEnter: function (marker, map, event) { },
-            onMarkerLegendMouseLeave: function (marker, map, event) { }
+            onMarkerLegendMouseLeave: function (marker, map, event) { },
+            onClusterClick:           function (markers, cluster, map) { },
+            onClusterMouseEnter:      function (markers, cluster, map) { },
+            onClusterMouseLeave:      function (markers, cluster, map) { }
         };
 
     function Plugin (mapContainer, options) {
@@ -212,6 +215,10 @@
                 enableRetinaIcons: this.options.clusterRetina,
                 styles: this.getClustersIconStyles()
             });
+
+            this.markerClusterer.addListener('click',     function(cluster) { this.onClusterClick(cluster);      }.bind(this));
+            this.markerClusterer.addListener('mouseover', function(cluster) { this.onClusterMouseEnter(cluster); }.bind(this));
+            this.markerClusterer.addListener('mouseout',  function(cluster) { this.onClusterMouseLeave(cluster); }.bind(this));
         },
 
         shouldDisableClustering: function () {
@@ -433,6 +440,18 @@
         onMarkerLegendMouseLeave: function (event) {
             var marker = $(event.currentTarget).data('marker');
             this.runUserCallback(this.options.onMarkerLegendMouseLeave, marker, this.map, event);
+        },
+
+        onClusterClick: function (cluster) {
+            this.runUserCallback(this.options.onClusterClick, cluster.getMarkers(), cluster, this.map);
+        },
+
+        onClusterMouseEnter: function (cluster) {
+            this.runUserCallback(this.options.onClusterMouseEnter, cluster.getMarkers(), cluster, this.map);
+        },
+
+        onClusterMouseLeave: function (cluster) {
+            this.runUserCallback(this.options.onClusterMouseLeave, cluster.getMarkers(), cluster, this.map);
         },
 
         runUserCallback: function (callback) {

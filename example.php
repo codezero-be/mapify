@@ -80,7 +80,17 @@
         $('.map').mapify({
             onMarkerClick: function (marker, map, event) {
                 console.log('clicked', marker, map);
-            }
+            },
+
+            onClusterClick: function (markers, cluster, map) {
+                console.log('click', markers, cluster, map);
+            },
+            onClusterMouseEnter: function (markers, cluster, map) {
+                console.log('enter', markers, cluster, map);
+            },
+            onClusterMouseLeave: function (markers, cluster, map) {
+                console.log('leave', markers, cluster, map);
+            },
         });
     }
 </script>
