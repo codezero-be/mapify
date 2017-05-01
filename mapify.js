@@ -30,6 +30,26 @@
             iconOrigin: null, //=> optional
             iconAnchor: null, //=> optional
 
+            clusters: true, //=> enable marker clustering?
+            clusterTitle: '', //=> browser tooltip when hovering over a cluster icon
+            clusterCenter: true, //=> position the cluster icon in the center of the markers or on the first marker
+            clusterGridSize: 40, //=> the lower the grid size, the closer markers need to be to each other to be clustered
+            clusterMinSize: 2, //=> the minimum number of markers needed in a cluster before a cluster appears
+            clusterMaxZoom: 15, //=> stop clustering when zoomed in to this level
+            clusterZoomOnClick: true,
+            clusterRetina: true,
+            clusterIcon: 'cluster.png',
+            clusterIconSize: '50,50', //=> should be actual icon size or the text will be positioned wrong
+            clusterTextColor: '#ffffff',
+            clusterTextSize: 12,
+
+            // Array of cluster icon styles...
+            // If defined, this overrides previous cluster icon and text options.
+            // Each style in the array is a ClusterIconStyle class/object.
+            // Check the official documentation for more details:
+            // http://htmlpreview.github.io/?https://github.com/googlemaps/v3-utility-library/blob/master/markerclustererplus/docs/reference.html
+            clusterIcons: null,
+
             // The following callbacks are available...
             // The map and marker parameters are the Google Map and Marker objects.
             // You can access the related .map and .marker DOM elements as jQuery objects
@@ -54,6 +74,7 @@
         this.map = null; //=> Google Map object
         this.markers = []; //=> Google Marker objects
         this.bounds = []; //=> Google Marker objects that should fit in the map
+        this.markerClusterer = null; //=> Google MarkerClusterer object
 
         this.init();
     }
@@ -65,6 +86,7 @@
             this.createMarkers();
             this.setMapOptions();
             this.fitBounds();
+            this.enableClustering();
         },
 
         createMap: function () {
@@ -172,6 +194,56 @@
             }
         },
 
+        enableClustering: function () {
+            if (this.shouldDisableClustering()) {
+                return;
+            }
+
+            // Requires markerclusterer.js
+            // Docs: http://htmlpreview.github.io/?https://github.com/googlemaps/v3-utility-library/blob/master/markerclustererplus/docs/reference.html
+
+            this.markerClusterer = new MarkerClusterer(this.map, this.markers, {
+                title: this.options.clusterTitle,
+                averageCenter: this.options.clusterCenter,
+                gridSize: this.options.clusterGridSize,
+                minimumClusterSize: this.options.clusterMinSize,
+                maxZoom: this.options.clusterMaxZoom,
+                zoomOnClick: this.options.clusterZoomOnClick,
+                enableRetinaIcons: this.options.clusterRetina,
+                styles: this.getClustersIconStyles()
+            });
+        },
+
+        shouldDisableClustering: function () {
+            return ! this.classExists('MarkerClusterer') || this.options.clusters === false || this.markers.length < 2;
+        },
+
+        getClustersIconStyles: function () {
+            if (this.isArray(this.options.clusterIcons)) {
+                return this.options.clusterIcons;
+            }
+
+            var clusterIconSize = this.splitNumbers(this.options.clusterIconSize);
+
+            return [{
+                width: clusterIconSize[0], //=> actual image width
+                height: clusterIconSize[1], //=> actual image height
+                url: this.options.clusterIcon,
+                backgroundPosition: '0, 0', //=> mind the space after the comma !!!
+                anchorIcon: [
+                    clusterIconSize[1] / 2, //=> Y
+                    clusterIconSize[0] / 2  //=> X
+                ],
+                anchorText: [0, 0], //=> [Y,X] from the center of the cluster icon
+                textColor: this.options.clusterTextColor,
+                textSize: this.options.clusterTextSize,
+                textDecoration: 'none',
+                fontFamily: 'Arial, sans-serif',
+                fontStyle: 'normal',
+                fontWeight: 'bold'
+            }];
+        },
+
         //
         // Normalize Marker Options
         //
@@ -236,18 +308,33 @@
         getMapDataAttributes: function () {
             return this.removeEmptyObjectProperties({
                 markers: this.$map.data('markers'),
-                zoom: this.$map.data('zoom'),
-                scrollwheel: this.$map.data('scrollwheel'),
-                fitbounds: this.$map.data('fitbounds'),
-                fitboundsPadding: this.$map.data('fitbounds-padding'),
                 lat: this.$map.data('lat'),
                 lng: this.$map.data('lng'),
                 centerLat: this.$map.data('center-lat') || this.$map.data('lat'),
                 centerLng: this.$map.data('center-lng') || this.$map.data('lng'),
+                zoom: this.$map.data('zoom'),
+                scrollwheel: this.$map.data('scrollwheel'),
+
                 icon: this.$map.data('icon'),
                 iconSize: this.$map.data('icon-size'),
                 iconOrigin: this.$map.data('icon-origin'),
-                iconAnchor: this.$map.data('icon-anchor')
+                iconAnchor: this.$map.data('icon-anchor'),
+
+                fitbounds: this.$map.data('fitbounds'),
+                fitboundsPadding: this.$map.data('fitbounds-padding'),
+
+                clusters: this.$map.data('clusters'),
+                clusterTitle: this.$map.data('cluster-title'),
+                clusterCenter: this.$map.data('cluster-center'),
+                clusterGridSize: this.$map.data('cluster-grid-size'),
+                clusterMinSize: this.$map.data('cluster-min-size'),
+                clusterMaxZoom: this.$map.data('cluster-max-zoom'),
+                clusterZoomOnClick: this.$map.data('cluster-zoom-on-click'),
+                clusterRetina: this.$map.data('cluster-retina'),
+                clusterIcon: this.$map.data('cluster-icon'),
+                clusterIconSize: this.$map.data('cluster-icon-size'),
+                clusterTextColor: this.$map.data('cluster-text-color'),
+                clusterTextSize: this.$map.data('cluster-text-size')
             });
         },
 
@@ -260,15 +347,15 @@
         },
 
         createSize: function (size) {
-            size = this.splitValues(size);
+            size = this.splitNumbers(size);
 
-            return size ? new google.maps.Size(size.x, size.y) : null;
+            return size ? new google.maps.Size(size[0], size[1]) : null;
         },
 
         createPoint: function (point) {
-            point = this.splitValues(point);
+            point = this.splitNumbers(point);
 
-            return point ? new google.maps.Point(point.x, point.y) : null;
+            return point ? new google.maps.Point(point[0], point[1]) : null;
         },
 
         //
@@ -288,20 +375,19 @@
         },
 
         isArray: function (value) {
-            return value.constructor === Array;
+            return value !== null && value !== undefined && value.constructor === Array;
         },
 
-        splitValues: function (values) {
+        classExists: function (className) {
+            return typeof window[className] === 'function' && typeof window[className].prototype === 'object';
+        },
+
+        splitNumbers: function (values) {
             if ( ! values) {
                 return null;
             }
 
-            values = values.split(',');
-
-            return {
-                x: values[0],
-                y: values[1]
-            };
+            return values.split(',');
         },
 
         removeEmptyObjectProperties: function (obj) {

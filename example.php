@@ -20,7 +20,7 @@
 
 <h2>Map with Multiple Markers</h2>
 
-<div class="map" data-markers="#map1-markers .marker" data-fitbounds="true"></div>
+<div class="map" data-markers="#map1-markers .marker"></div>
 
 <ul id="map1-markers">
     <li class="marker" data-lat="51.251245" data-lng="4.497890">
@@ -57,7 +57,6 @@
     <li class="marker"
         data-lat="51.172364"
         data-lng="4.336061"
-        data-fitbounds="true"
         data-center="true"
         data-label="A"
         data-title="Hello World">
@@ -86,6 +85,7 @@
     }
 </script>
 
+<script src="markerclusterer.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=<?= GOOGLE_API_KEY ?>&callback=initMap" async defer></script>
 
 </body>
