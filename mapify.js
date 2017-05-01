@@ -412,51 +412,51 @@
         //
 
         onMapClick: function (event) {
-            this.runUserCallback(this.options.onMapClick, this.map, event);
+            this.runUserCallback(this.options.onMapClick, this.map, this.map, event);
         },
 
         onMarkerClick: function (marker, event) {
-            this.runUserCallback(this.options.onMarkerClick, marker, this.map, event);
+            this.runUserCallback(this.options.onMarkerClick, marker, marker, this.map, event);
         },
 
         onMarkerMouseEnter: function (marker, event) {
-            this.runUserCallback(this.options.onMarkerMouseEnter, marker, this.map, event);
+            this.runUserCallback(this.options.onMarkerMouseEnter, marker, marker, this.map, event);
         },
 
         onMarkerMouseLeave: function (marker, event) {
-            this.runUserCallback(this.options.onMarkerMouseLeave, marker, this.map, event);
+            this.runUserCallback(this.options.onMarkerMouseLeave, marker, marker, this.map, event);
         },
 
         onMarkerLegendClick: function (event) {
             var marker = $(event.currentTarget).data('marker');
-            this.runUserCallback(this.options.onMarkerLegendClick, marker, this.map, event);
+            this.runUserCallback(this.options.onMarkerLegendClick, marker, marker, this.map, event);
         },
 
         onMarkerLegendMouseEnter: function (event) {
             var marker = $(event.currentTarget).data('marker');
-            this.runUserCallback(this.options.onMarkerLegendMouseEnter, marker, this.map, event);
+            this.runUserCallback(this.options.onMarkerLegendMouseEnter, marker, marker, this.map, event);
         },
 
         onMarkerLegendMouseLeave: function (event) {
             var marker = $(event.currentTarget).data('marker');
-            this.runUserCallback(this.options.onMarkerLegendMouseLeave, marker, this.map, event);
+            this.runUserCallback(this.options.onMarkerLegendMouseLeave, marker, marker, this.map, event);
         },
 
         onClusterClick: function (cluster) {
-            this.runUserCallback(this.options.onClusterClick, cluster.getMarkers(), cluster, this.map);
+            this.runUserCallback(this.options.onClusterClick, cluster, cluster.getMarkers(), cluster, this.map);
         },
 
         onClusterMouseEnter: function (cluster) {
-            this.runUserCallback(this.options.onClusterMouseEnter, cluster.getMarkers(), cluster, this.map);
+            this.runUserCallback(this.options.onClusterMouseEnter, cluster, cluster.getMarkers(), cluster, this.map);
         },
 
         onClusterMouseLeave: function (cluster) {
-            this.runUserCallback(this.options.onClusterMouseLeave, cluster.getMarkers(), cluster, this.map);
+            this.runUserCallback(this.options.onClusterMouseLeave, cluster, cluster.getMarkers(), cluster, this.map);
         },
 
-        runUserCallback: function (callback) {
+        runUserCallback: function (callback, target) {
             if (callback instanceof Function) {
-                callback.apply(this, Array.prototype.slice.call(arguments, 1));
+                callback.apply(target, Array.prototype.slice.call(arguments, 2));
             }
         }
 
