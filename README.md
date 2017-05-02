@@ -344,9 +344,9 @@ The default width and height is `50` pixels. You must either save your image in 
 - `clusterTextSize: 12` **(JavaScript)**
 - `data-cluster-text-size="12"` **(HTML)**
 
-#### Advanced Cluster Icons
+#### Multiple / Advanced Cluster Icons
 
-If you set the `clusterIcons` option, you override the basic icon options with advaned settings. The option expects an array of [`ClusterIconStyle`](http://htmlpreview.github.io/?https://github.com/googlemaps/v3-utility-library/blob/master/markerclustererplus/docs/reference.html) objects. This can only be set via javascript.
+If you set the `clusterIcons` option, you override the basic icon options with advanced settings. The option expects an array of [`ClusterIconStyle`](http://htmlpreview.github.io/?https://github.com/googlemaps/v3-utility-library/blob/master/markerclustererplus/docs/reference.html) objects. This also allows you to define multiple cluster icons. This can only be set via javascript.
 
 For example:
 
@@ -354,14 +354,16 @@ For example:
 $('.map').mapify({
     clusterIcons: [
         {
+            // Required:
             width: 50, //=> actual image width !!!
             height: 50, //=> actual image height !!!
             url: 'path/to/icon.png',
-            backgroundPosition: '0, 0', //=> mind the space after the comma !!!
-            anchorIcon: [25, 25], //=> [Y,X] center of the icon
-            anchorText: [0, 0], //=> [Y,X] from the center of the icon
-            textColor: '#ffffff',
-            textSize: 12,
+            // Optional:
+            backgroundPosition: '0, 0', //=> 'X, Y' (mind the space!)
+            anchorIcon: [25, 25], //=> [Y,X] (defauls to center of the icon)
+            anchorText: [0, 0], //=> [Y,X] (from the center of the icon)
+            textColor: '#000000',
+            textSize: 11,
             textDecoration: 'none',
             fontFamily: 'Arial, sans-serif',
             fontStyle: 'normal',
