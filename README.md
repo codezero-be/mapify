@@ -376,6 +376,54 @@ $('.map').mapify({
 });
 ```
 
+With the `clusterCalculator` function (see below) you can choose to show specific icons based on the markers and the number of available icons.
+
+#### Dynamic Cluster Text, Tooltip and Icon
+
+Using the `clusterCalculator` function, you can choose what text to display inside of the icon, what tooltip (title) to show on hover and which icon from the `clusterIcons` array to show, based on the cluster's markers and the number of available icons.
+
+```javascript
+$('.map').mapify({
+    clusterCalculator: function (markers, totalAvailableIcons) {
+        var index = 0,
+            title = '',
+            count = markers.length.toString();
+
+        // Your logic here...
+        
+        return {
+            text: count,
+            index: index,
+            title: title
+    	};
+    }
+});
+```
+
+This is the default function, taken from [markerclusterer.js](https://github.com/googlemaps/v3-utility-library/blob/master/markerclustererplus/src/markerclusterer.js), which will show the next icon in the array for every ten markers in the cluster:
+
+```javascript
+function (markers, totalAvailableIcons) {
+    var index = 0,
+        title = '',
+        count = markers.length.toString(),
+        dv = count;
+
+    while (dv !== 0) {
+        dv = parseInt(dv / 10, 10);
+        index++;
+    }
+
+    index = Math.min(index, totalAvailableIcons);
+
+    return {
+        text: count,
+        index: index,
+        title: title
+    };
+}
+```
+
 ## Other Options
 
 ### Map Center Position

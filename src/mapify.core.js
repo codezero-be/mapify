@@ -50,6 +50,29 @@
             // http://htmlpreview.github.io/?https://github.com/googlemaps/v3-utility-library/blob/master/markerclustererplus/docs/reference.html
             clusterIcons: null,
 
+            // Function that returns an object containing
+            // the text and title for the cluster icon,
+            // as well as the clusterIcons array index to use.
+            clusterCalculator: function (markers, totalAvailableIcons) {
+                var index = 0,
+                    title = '',
+                    count = markers.length.toString(),
+                    dv = count;
+
+                while (dv !== 0) {
+                    dv = parseInt(dv / 10, 10);
+                    index++;
+                }
+
+                index = Math.min(index, totalAvailableIcons);
+
+                return {
+                    text: count,
+                    index: index,
+                    title: title
+                };
+            },
+
             // The following callbacks are available...
             // The map and marker parameters are the Google Map and Marker objects.
             // You can access the related .map and .marker DOM elements as jQuery objects
@@ -213,6 +236,7 @@
                 maxZoom: this.options.clusterMaxZoom,
                 zoomOnClick: this.options.clusterZoomOnClick,
                 enableRetinaIcons: this.options.clusterRetina,
+                calculator: this.options.clusterCalculator,
                 styles: this.getClustersIconStyles()
             });
 
