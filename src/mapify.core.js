@@ -13,6 +13,7 @@
             lng: null,
             centerLat: null,
             centerLng: null,
+            backgroundColor: '#ffffff', //=> background color of the map, visible when tiles are not yet loaded
 
             // Possible map types:
             // - roadmap
@@ -204,6 +205,7 @@
                     zoom: this.options.zoom,
                     scrollwheel: this.options.scrollwheel,
                     mapTypeId: google.maps.MapTypeId[this.options.mapType.toUpperCase()],
+                    backgroundColor: this.options.backgroundColor,
                     styles: this.options.styles
                 })
             );
@@ -368,6 +370,7 @@
                 lng: this.$map.data('lng'),
                 centerLat: this.$map.data('center-lat') || this.$map.data('lat'),
                 centerLng: this.$map.data('center-lng') || this.$map.data('lng'),
+                backgroundColor: this.$map.data('background-color'),
                 mapType: this.$map.data('map-type'),
                 gestures: this.$map.data('gestures'),
                 zoom: this.$map.data('zoom'),

@@ -12,6 +12,7 @@
     - [Gesture Handling](#gesture-handling)
     - [Zoom Level](#zoom-level)
     - [Zoom on Scroll](#zoom-on-scroll)
+    - [Map Background Color](#map-background-color)
     - [Map Type](#map-type)
     - [Custom Map Styles](#custom-map-styles)
     - [Custom Marker Icons](#custom-marker-icons)
@@ -321,6 +322,26 @@ With a data attribute:
 ```html
 <div class="map" data-scrollwheel="true"></div>
 ```
+
+### Map Background Color
+
+**Default:** `'#ffffff'`
+
+The background color of the map that is visible when map tiles are not yet loaded.
+
+Set it via javascript:
+
+```javascript
+$('.map').mapify({
+    backgroundColor: '#ffffff'
+});
+```
+
+Or with a data attribute:
+
+````html
+<div class="map" data-background-color="#ffffff"></div>
+````
 
 ### Map Type
 
