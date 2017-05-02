@@ -14,6 +14,10 @@
             centerLat: null,
             centerLng: null,
 
+            // Custom map styles...
+            // Find premade themes on https://snazzymaps.com/
+            styles: null,
+
             // Map zoom level...
             // 1: World
             // 5: Landmass/continent
@@ -179,7 +183,8 @@
                 this.removeEmptyObjectProperties({
                     center: this.getMapCenterPosition(),
                     zoom: this.options.zoom,
-                    scrollwheel: this.options.scrollwheel
+                    scrollwheel: this.options.scrollwheel,
+                    styles: this.options.styles
                 })
             );
         },
