@@ -1,5 +1,40 @@
 # Mapify - Google Maps jQuery Plugin
 
+## Contents
+
+- [Installation](#installation)
+- [The Big Picture](#the-big-picture)
+- [Creating a Map](#creating-a-map)
+    - [Map with a Single Marker](#map-with-a-single-marker)
+    - [Map with Multiple Markers](#map-with-multiple-markers)
+- [Basic Options](#basic-options)
+    - [Map Center Position](#map-center-position)
+    - [Zoom Level](#zoom-level)
+    - [Zoom on Scroll](#zoom-on-scroll)
+    - [Map Type](#map-type)
+    - [Custom Map Styles](#custom-map-styles)
+    - [Custom Marker Icons](#custom-marker-icons)
+    - [Marker Label and Title](#marker-label-and-title)
+- [Fit Markers on the Map](#fit-markers-on-the-map)
+    - [Fit All Markers on the Map](#fit-all-markers-on-the-map)
+    - [Fit Specific Markers on the Map](#fit-specific-markers-on-the-map)
+    - [Fit Markers on the Map with Extra Padding](#fit-markers-on-the-map-with-extra-padding)
+- [Marker Clustering](#marker-clustering)
+- [Cluster Options](#cluster-options)
+    - [Browser Tooltip](#browser-tooltip)
+    - [Center Cluster Icon](#center-cluster-icon)
+    - [Cluster Grid Size](#cluster-grid-size)
+    - [Cluster Min Size](#cluster-min-size)
+    - [Cluster Max Zoom](#cluster-max-zoom)
+    - [Cluster Zoom on Click](#cluster-zoom-on-click)
+    - [Enable Cluster Retina Icons](#enable-cluster-retina-icons)
+    - [Cluster Icon](#cluster-icon)
+    - [Cluster Icon Size](#cluster-icon-size)
+    - [Cluster Icon Text Color](#cluster-icon-text-color)
+    - [Cluster Icon Text Size](#cluster-icon-text-size)
+    - [Multiple / Advanced Cluster Icons](#multiple-advanced-cluster-icons)
+    - [Dynamic Cluster Text, Tooltip and Icon](#dynamic-cluster-text-tooltip-and-icon)
+
 ## Installation
 
 ### Install via Bower
@@ -68,7 +103,7 @@ What configuration strategy you choose is personal preference. However, in more 
 
 >   In any case you will need a map element and run `.mapify()` on it with jQuery. Where you put the options is up to you.
 
-## Usage
+## Creating a Map
 
 ### Map with a Single Marker
 
@@ -133,298 +168,7 @@ The HTML marker elements could look like this minimal setup:
 
 >   You can use any HTML structure, it doesn't have to be a `ul`. Just make sure the selector matches and your markers have the necessary data attributes.
 
-## Fit Markers on the Map
-
-### Fit All Markers on the Map
-
-**Default:** `false` if only 1 marker, `true` if more than 1 marker
-
-Most likely you will want all of your markers to show up on the map initially. So if you add more than one marker, the `fitbounds` option is set to `true` by default. This will override any zoom level and center position you have set. If you do want to take control over this yourself, you can set `fitbounds` to `false`.
-
-With javascript:
-
-```javascript
-$('.map').mapify({
-    fitbounds: false
-});
-```
-
-With a data attribute:
-
-```html
-<div class="map" data-fitbounds="false"></div>
-```
-
-If you only have one marker, the map will be zoomed and centered on that marker. See below for more information about those settings.
-
-### Fit Specific Markers on the Map
-
-**Default:** `true` for all markers
-
-If you only want to zoom in on a few important markers initially, you can add a `fitbounds` option only to those markers. You don't have to disable `fitbounds` on the map, this is done automatically when the option is detected on a marker.
-
-With javascript:
-
-```javascript
-$('.map').mapify({
-    markers: [
-        { lat: 51.251245, lng: 4.497890, fitbounds: true },
-        { lat: 50.963258, lng: 3.706874, fitbounds: true }
-    ]
-});
-```
-
-With a data attribute:
-
-````html
-<ul id="map-markers">
-    <li class="marker"
-        data-lat="51.251245"
-        data-lng="4.497890"
-        data-fitbounds="true">
-        Marker A
-    </li>
-    <li class="marker"
-        data-lat="50.963258"
-        data-lng="3.706874"
-        data-fitbounds="true">
-        Marker B
-    </li>
-</ul>
-````
-
->   **Note from Google Maps Reference:** When the map is set to `display: none`, the `fitBounds` function reads the map's size as 0x0, and therefore does not do anything. To change the viewport while the map is hidden, set the map to `visibility: hidden`, thereby ensuring the map div has an actual size.
-
-### Fit Markers on the Map with Extra Padding
-
-**Default:** `50`
-
-The `fitboundsPadding` option is not well documented by Google, but after some experimenting it seems to work as follows… You set a pixel value that adds a "padding zone" to the map's boundaries. Google Maps will keep zooming in until one of your markers gets within the padding zone. This option can only be set on the map, as it doesn't make sense to set in on multiple markers.
-
-With javascript:
-
-```javascript
-$('.map').mapify({
-    fitbounds: true,
-    fitboundsPadding: 50
-});
-```
-
-With a data attribute:
-
-```html
-<div class="map" data-fitbounds="true" data-fitbounds-padding="50"></div>
-```
-
-## Marker Clustering
-
-**Default:** `true` up to a zoom level of `15`
-
-When 2 or more markers are too close and would overlap, those markers will be replaced by a new cluster icon, showing how many markers there are in that area. Clicking the cluster will zoom in and fit its markers on the map.
-
->   Marker clustering will only work when [`markerclusterer.js`](https://github.com/googlemaps/v3-utility-library/blob/master/markerclusterer/src/markerclusterer.js) is loaded. This script is already included in `mapify.min.js`.
-
-If you don't want marker clustering, you can disable it.
-
-With javascript:
-
-```javascript
-$('.map').mapify({
-    clusters: false
-});
-```
-
-With a data attribute:
-
-```html
-<div class="map" data-clusters="false"></div>
-```
-
-### Cluster Options
-
-You can set a number of cluster options **on the map**, with javascript or HTML data attributes.
-
-#### Browser Tooltip
-
-**Default:** `''` (no tooltip)
-
-Show a default browser tooltip when hovering over a cluster icon.
-
-- `clusterTitle: 'Click to see markers!'` **(JavaScript)**
-- `data-cluster-title="Click to see markers!"` **(HTML)**
-
-#### Center Cluster Icon
-
-**Default:** `true`
-
-Position the cluster icon in the center of its markers if set to `true`, or on top of the first marker if set to `false`.
-
-- `clusterCenter: true` **(JavaScript)**
-- `data-cluster-center="true"` **(HTML)**
-
-#### Cluster Grid Size
-
-**Default:** `40`
-
-How close markers need to be to eachother before being clustered. The lower the value, the closer the markers need to be.
-
-- `clusterGridSize: 40` **(JavaScript)**
-- `data-cluster-grid-size="40"` **(HTML)**
-
-#### Cluster Min Size
-
-**Default:** `2`
-
-The minimum number of markers that should be clustered.
-
-- `clusterMinSize: 2` **(JavaScript)**
-- `data-cluster-min-size="2"` **(HTML)**
-
-#### Cluster Max Zoom
-
-**Default:** `15` (street level)
-
-The maximum zoom level that markers will be clustered.
-
-- `clusterMaxZoom: 15` **(JavaScript)**
-- `data-cluster-max-zoom="15"` **(HTML)**
-
-#### Cluster Zoom on Click
-
-**Default:** `true`
-
-When you click on a cluster icon, zoom in to fit the cluster's markers on the map.
-
--   `clusterZoomOnClick: true` **(JavaScript)**
-
--   `data-cluster-zoom-on-click="true"` **(HTML)**
-
-#### Enable Cluster Retina Icons
-
-**Default:** `true`
-
-Enable the use of retina images as a cluster icon.
-
-- `clusterRetina: true` **(JavaScript)**
-- `data-cluster-retina="true"` **(HTML)**
-
-If this is `true`, sprites cannot be used as cluster icons (advanced).
-
-### Cluster Icons
-
-#### Change Icon
-
-**Default:** `/images/cluster.png`
-
-You can change the default cluster icon by setting a few basic options.
-
-- `clusterIcon: 'path/to/icon.png'` **(JavaScript)**
-- `data-cluster-icon="path/to/icon.png"` **(HTML)**
-
-#### Set Correct Icon Size
-
-**Default:** `'50,50'`
-
-The default width and height is `50` pixels. You must either save your image in that size, or specify the correct actual width and height of your image. If the sizes don't match, the text inside the cluster will not be positioned correctly. The option expects a value of `'width,height'.
-
-- `clusterIconSize: '50,50'` **(JavaScript)**
-- `data-cluster-icon-size="50,50"` **(HTML)**
-
-#### Icon Text Color
-
-**Default:** `'#ffffff'`
-
-- `clusterTextColor: '#ffffff'` **(JavaScript)**
-- `data-cluster-text-color="#ffffff"` **(HTML)**
-
-#### Icon Text Size:
-
-**Default:** `12`
-
-- `clusterTextSize: 12` **(JavaScript)**
-- `data-cluster-text-size="12"` **(HTML)**
-
-#### Multiple / Advanced Cluster Icons
-
-If you set the `clusterIcons` option, you override the basic icon options with advanced settings. The option expects an array of [`ClusterIconStyle`](http://htmlpreview.github.io/?https://github.com/googlemaps/v3-utility-library/blob/master/markerclustererplus/docs/reference.html) objects. This also allows you to define multiple cluster icons. This can only be set via javascript.
-
-For example:
-
-```javascript
-$('.map').mapify({
-    clusterIcons: [
-        {
-            // Required:
-            width: 50, //=> actual image width !!!
-            height: 50, //=> actual image height !!!
-            url: 'path/to/icon.png',
-            // Optional:
-            backgroundPosition: '0, 0', //=> 'X, Y' (mind the space!)
-            anchorIcon: [25, 25], //=> [Y,X] (defauls to center of the icon)
-            anchorText: [0, 0], //=> [Y,X] (from the center of the icon)
-            textColor: '#000000',
-            textSize: 11,
-            textDecoration: 'none',
-            fontFamily: 'Arial, sans-serif',
-            fontStyle: 'normal',
-            fontWeight: 'bold'
-        },
-        {
-          	...
-        }
-    ]
-});
-```
-
-With the `clusterCalculator` function (see below) you can choose to show specific icons based on the markers and the number of available icons.
-
-#### Dynamic Cluster Text, Tooltip and Icon
-
-Using the `clusterCalculator` function, you can choose what text to display inside of the icon, what tooltip (title) to show on hover and which icon from the `clusterIcons` array to show, based on the cluster's markers and the number of available icons.
-
-```javascript
-$('.map').mapify({
-    clusterCalculator: function (markers, totalAvailableIcons) {
-        var index = 0,
-            title = '',
-            count = markers.length.toString();
-
-        // Your logic here...
-        
-        return {
-            text: count,
-            index: index,
-            title: title
-    	};
-    }
-});
-```
-
-This is the default function, taken from [markerclusterer.js](https://github.com/googlemaps/v3-utility-library/blob/master/markerclustererplus/src/markerclusterer.js), which will show the next icon in the array for every ten markers in the cluster:
-
-```javascript
-function (markers, totalAvailableIcons) {
-    var index = 0,
-        title = '',
-        count = markers.length.toString(),
-        dv = count;
-
-    while (dv !== 0) {
-        dv = parseInt(dv / 10, 10);
-        index++;
-    }
-
-    index = Math.min(index, totalAvailableIcons);
-
-    return {
-        text: count,
-        index: index,
-        title: title
-    };
-}
-```
-
-## Other Options
+## Basic Options
 
 ### Map Center Position
 
@@ -677,3 +421,294 @@ Or on the marker element:
     </li>
 </ul>
 ````
+
+## Fit Markers on the Map
+
+### Fit All Markers on the Map
+
+**Default:** `false` if only 1 marker, `true` if more than 1 marker
+
+Most likely you will want all of your markers to show up on the map initially. So if you add more than one marker, the `fitbounds` option is set to `true` by default. This will override any zoom level and center position you have set. If you do want to take control over this yourself, you can set `fitbounds` to `false`.
+
+With javascript:
+
+```javascript
+$('.map').mapify({
+    fitbounds: false
+});
+```
+
+With a data attribute:
+
+```html
+<div class="map" data-fitbounds="false"></div>
+```
+
+If you only have one marker, the map will be zoomed and centered on that marker. See below for more information about those settings.
+
+### Fit Specific Markers on the Map
+
+**Default:** `true` for all markers
+
+If you only want to zoom in on a few important markers initially, you can add a `fitbounds` option only to those markers. You don't have to disable `fitbounds` on the map, this is done automatically when the option is detected on a marker.
+
+With javascript:
+
+```javascript
+$('.map').mapify({
+    markers: [
+        { lat: 51.251245, lng: 4.497890, fitbounds: true },
+        { lat: 50.963258, lng: 3.706874, fitbounds: true }
+    ]
+});
+```
+
+With a data attribute:
+
+````html
+<ul id="map-markers">
+    <li class="marker"
+        data-lat="51.251245"
+        data-lng="4.497890"
+        data-fitbounds="true">
+        Marker A
+    </li>
+    <li class="marker"
+        data-lat="50.963258"
+        data-lng="3.706874"
+        data-fitbounds="true">
+        Marker B
+    </li>
+</ul>
+````
+
+>   **Note from Google Maps Reference:** When the map is set to `display: none`, the `fitBounds` function reads the map's size as 0x0, and therefore does not do anything. To change the viewport while the map is hidden, set the map to `visibility: hidden`, thereby ensuring the map div has an actual size.
+
+### Fit Markers on the Map with Extra Padding
+
+**Default:** `50`
+
+The `fitboundsPadding` option is not well documented by Google, but after some experimenting it seems to work as follows… You set a pixel value that adds a "padding zone" to the map's boundaries. Google Maps will keep zooming in until one of your markers gets within the padding zone. This option can only be set on the map, as it doesn't make sense to set in on multiple markers.
+
+With javascript:
+
+```javascript
+$('.map').mapify({
+    fitbounds: true,
+    fitboundsPadding: 50
+});
+```
+
+With a data attribute:
+
+```html
+<div class="map" data-fitbounds="true" data-fitbounds-padding="50"></div>
+```
+
+## Marker Clustering
+
+**Default:** `true` up to a zoom level of `15`
+
+When 2 or more markers are too close and would overlap, those markers will be replaced by a new cluster icon, showing how many markers there are in that area. Clicking the cluster will zoom in and fit its markers on the map.
+
+>   Marker clustering will only work when [`markerclusterer.js`](https://github.com/googlemaps/v3-utility-library/blob/master/markerclusterer/src/markerclusterer.js) is loaded. This script is already included in `mapify.min.js`.
+
+If you don't want marker clustering, you can disable it.
+
+With javascript:
+
+```javascript
+$('.map').mapify({
+    clusters: false
+});
+```
+
+With a data attribute:
+
+```html
+<div class="map" data-clusters="false"></div>
+```
+
+## Cluster Options
+
+You can set a number of cluster options **on the map**, with javascript or HTML data attributes.
+
+### Browser Tooltip
+
+**Default:** `''` (no tooltip)
+
+Show a default browser tooltip when hovering over a cluster icon.
+
+- `clusterTitle: 'Click to see markers!'` **(JavaScript)**
+- `data-cluster-title="Click to see markers!"` **(HTML)**
+
+### Center Cluster Icon
+
+**Default:** `true`
+
+Position the cluster icon in the center of its markers if set to `true`, or on top of the first marker if set to `false`.
+
+- `clusterCenter: true` **(JavaScript)**
+- `data-cluster-center="true"` **(HTML)**
+
+### Cluster Grid Size
+
+**Default:** `40`
+
+How close markers need to be to eachother before being clustered. The lower the value, the closer the markers need to be.
+
+- `clusterGridSize: 40` **(JavaScript)**
+- `data-cluster-grid-size="40"` **(HTML)**
+
+### Cluster Min Size
+
+**Default:** `2`
+
+The minimum number of markers that should be clustered.
+
+- `clusterMinSize: 2` **(JavaScript)**
+- `data-cluster-min-size="2"` **(HTML)**
+
+### Cluster Max Zoom
+
+**Default:** `15` (street level)
+
+The maximum zoom level that markers will be clustered.
+
+- `clusterMaxZoom: 15` **(JavaScript)**
+- `data-cluster-max-zoom="15"` **(HTML)**
+
+### Cluster Zoom on Click
+
+**Default:** `true`
+
+When you click on a cluster icon, zoom in to fit the cluster's markers on the map.
+
+-   `clusterZoomOnClick: true` **(JavaScript)**
+
+-   `data-cluster-zoom-on-click="true"` **(HTML)**
+
+### Enable Cluster Retina Icons
+
+**Default:** `true`
+
+Enable the use of retina images as a cluster icon.
+
+- `clusterRetina: true` **(JavaScript)**
+- `data-cluster-retina="true"` **(HTML)**
+
+If this is `true`, sprites cannot be used as cluster icons (advanced).
+
+### Cluster Icon
+
+**Default:** `/images/cluster.png`
+
+You can change the default cluster icon by setting a few basic options.
+
+- `clusterIcon: 'path/to/icon.png'` **(JavaScript)**
+- `data-cluster-icon="path/to/icon.png"` **(HTML)**
+
+### Cluster Icon Size
+
+**Default:** `'50,50'`
+
+The default width and height is `50` pixels. You must either save your image in that size, or specify the correct actual width and height of your image. The option expects a value of `'width,height'.
+
+- `clusterIconSize: '50,50'` **(JavaScript)**
+- `data-cluster-icon-size="50,50"` **(HTML)**
+
+> **Important Note!** If the sizes don't match the actual image sizes, the text inside the cluster will not be positioned correctly.
+
+### Cluster Icon Text Color
+
+**Default:** `'#ffffff'`
+
+- `clusterTextColor: '#ffffff'` **(JavaScript)**
+- `data-cluster-text-color="#ffffff"` **(HTML)**
+
+### Cluster Icon Text Size:
+
+**Default:** `12`
+
+- `clusterTextSize: 12` **(JavaScript)**
+- `data-cluster-text-size="12"` **(HTML)**
+
+### Multiple / Advanced Cluster Icons
+
+If you set the `clusterIcons` option, you override the basic icon options with advanced settings. The option expects an array of [`ClusterIconStyle`](http://htmlpreview.github.io/?https://github.com/googlemaps/v3-utility-library/blob/master/markerclustererplus/docs/reference.html) objects. This also allows you to define multiple cluster icons. This can only be set via javascript.
+
+For example:
+
+```javascript
+$('.map').mapify({
+    clusterIcons: [
+        {
+            // Required:
+            width: 50, //=> actual image width !!!
+            height: 50, //=> actual image height !!!
+            url: 'path/to/icon.png',
+            // Optional:
+            backgroundPosition: '0, 0', //=> 'X, Y' (mind the space!)
+            anchorIcon: [25, 25], //=> [Y,X] (defauls to center of the icon)
+            anchorText: [0, 0], //=> [Y,X] (from the center of the icon)
+            textColor: '#000000',
+            textSize: 11,
+            textDecoration: 'none',
+            fontFamily: 'Arial, sans-serif',
+            fontStyle: 'normal',
+            fontWeight: 'bold'
+        },
+        {
+          	...
+        }
+    ]
+});
+```
+
+With the `clusterCalculator` function (see below) you can choose to show specific icons based on the markers and the number of available icons.
+
+### Dynamic Cluster Text, Tooltip and Icon
+
+Using the `clusterCalculator` function, you can choose what text to display inside of the icon, what tooltip (title) to show on hover and which icon from the `clusterIcons` array to show, based on the cluster's markers and the number of available icons.
+
+```javascript
+$('.map').mapify({
+    clusterCalculator: function (markers, totalAvailableIcons) {
+        var index = 0,
+            title = '',
+            count = markers.length.toString();
+
+        // Your logic here...
+        
+        return {
+            text: count,
+            index: index,
+            title: title
+    	};
+    }
+});
+```
+
+This is the default function, taken from [markerclusterer.js](https://github.com/googlemaps/v3-utility-library/blob/master/markerclustererplus/src/markerclusterer.js), which will show the next icon in the array for every ten markers in the cluster:
+
+```javascript
+function (markers, totalAvailableIcons) {
+    var index = 0,
+        title = '',
+        count = markers.length.toString(),
+        dv = count;
+
+    while (dv !== 0) {
+        dv = parseInt(dv / 10, 10);
+        index++;
+    }
+
+    index = Math.min(index, totalAvailableIcons);
+
+    return {
+        text: count,
+        index: index,
+        title: title
+    };
+}
+```
