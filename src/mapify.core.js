@@ -25,6 +25,17 @@
             // Find premade themes on https://snazzymaps.com/
             styles: null,
 
+            // Gesture handling...
+            // - 'none':        The map cannot be panned or zoomed by user gestures.
+            // - 'greedy':      All touch gestures pan or zoom the map.
+            // - 'cooperative': Two-finger touch gestures pan and zoom the map.
+            //                  One-finger touch gestures are not handled by the map.
+            //                  In this mode, the map cooperates with the page,
+            //                  so that one-finger touch gestures can pan the page.
+            // - 'auto':        Gesture handling is either cooperative or greedy,
+            //                  depending on whether the page is scrollable or not.
+            gestures: 'cooperative',
+
             // Map zoom level...
             // 1: World
             // 5: Landmass/continent
@@ -189,6 +200,7 @@
             this.map.setOptions(
                 this.removeEmptyObjectProperties({
                     center: this.getMapCenterPosition(),
+                    gestureHandling: this.options.gestures,
                     zoom: this.options.zoom,
                     scrollwheel: this.options.scrollwheel,
                     mapTypeId: google.maps.MapTypeId[this.options.mapType.toUpperCase()],
@@ -357,6 +369,7 @@
                 centerLat: this.$map.data('center-lat') || this.$map.data('lat'),
                 centerLng: this.$map.data('center-lng') || this.$map.data('lng'),
                 mapType: this.$map.data('map-type'),
+                gestures: this.$map.data('gestures'),
                 zoom: this.$map.data('zoom'),
                 scrollwheel: this.$map.data('scrollwheel'),
 

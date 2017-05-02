@@ -9,6 +9,7 @@
     - [Map with Multiple Markers](#map-with-multiple-markers)
 - [Basic Options](#basic-options)
     - [Map Center Position](#map-center-position)
+    - [Gesture Handling](#gesture-handling)
     - [Zoom Level](#zoom-level)
     - [Zoom on Scroll](#zoom-on-scroll)
     - [Map Type](#map-type)
@@ -238,6 +239,42 @@ Or by adding a `data-center` attribute to a marker element:
 
 >   If you set a marker as the center point, this will take precedence over any other configuration.
 >   If you set multiple markers as center, the last one will be used.
+
+### Gesture Handling
+
+**Default:** `cooperative`
+
+Straight from the Google Maps documentation:
+
+#####`'none'`
+
+The map cannot be panned or zoomed by user gestures.
+
+#####`'greedy'`
+
+All touch gestures pan or zoom the map.
+
+#####`'cooperative'`
+
+Two-finger touch gestures pan and zoom the map. One-finger touch gestures are not handled by the map. In this mode, the map cooperates with the page, so that one-finger touch gestures can pan the page.
+
+#####`'auto'`
+
+Gesture handling is either cooperative or greedy, depending on whether the page is scrollable or not.
+
+Set one of the above values with javascript:
+
+```javascript
+$('.map').mapify({
+    gestures: 'cooperative'
+});
+```
+
+Or with a data attribute:
+
+```html
+<div class="map" data-gestures="cooperative"></div>
+```
 
 ### Zoom Level
 
