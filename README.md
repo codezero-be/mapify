@@ -541,6 +541,45 @@ With a data attribute:
 <div class="map" data-scrollwheel="true"></div>
 ```
 
+### Map Type
+
+**Default:** `'roadmap'`
+
+The initial map type to show.
+
+- `roadmap`
+- `terrain`
+- `satellite`
+- `hybrid`
+
+Set it via javascript:
+
+```javascript
+$('.map').mapify({
+    mapType: 'roadmap'
+});
+```
+
+Or with a data attribute:
+
+````html
+<div class="map" data-map-type="roadmap"></div>
+````
+
+### Custom Map Styles
+
+An easy way to make a map blend in with the rest of your website is to create or find a theme or custom styles. One great resource for premade Google Maps themes is [SnazzyMaps](https://snazzymaps.com/). Applying one is also easy: open a theme, copy its "javascript style array" and set it as the value of the `styles` option.
+
+Note that for satellite/hybrid and terrain modes, these styles will only apply to labels and geometry.
+
+This option can only be set via javascript.
+
+```javascript
+$('.map').mapify({
+    styles: /* styles array here */
+});
+```
+
 ### Custom Marker Icons
 
 **Default:** standard Google icons
@@ -638,17 +677,3 @@ Or on the marker element:
     </li>
 </ul>
 ````
-
-### Custom Map Styles
-
-An easy way to make a map blend in with the rest of your website is to create or find a theme or custom styles. One great resource for premade Google Maps themes is [SnazzyMaps](https://snazzymaps.com/). Applying one is also easy: open a theme, copy its "javascript style array" and set it as the value of the `styles` option.
-
-Note that for satellite/hybrid and terrain modes, these styles will only apply to labels and geometry.
-
-This option can only be set via javascript.
-
-```javascript
-$('.map').mapify({
-    styles: /* styles array here */
-});
-```

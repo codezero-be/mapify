@@ -14,6 +14,13 @@
             centerLat: null,
             centerLng: null,
 
+            // Possible map types:
+            // - roadmap
+            // - terrain
+            // - satellite
+            // - hybrid
+            mapType: 'roadmap',
+
             // Custom map styles...
             // Find premade themes on https://snazzymaps.com/
             styles: null,
@@ -184,6 +191,7 @@
                     center: this.getMapCenterPosition(),
                     zoom: this.options.zoom,
                     scrollwheel: this.options.scrollwheel,
+                    mapTypeId: google.maps.MapTypeId[this.options.mapType.toUpperCase()],
                     styles: this.options.styles
                 })
             );
@@ -348,6 +356,7 @@
                 lng: this.$map.data('lng'),
                 centerLat: this.$map.data('center-lat') || this.$map.data('lat'),
                 centerLng: this.$map.data('center-lng') || this.$map.data('lng'),
+                mapType: this.$map.data('map-type'),
                 zoom: this.$map.data('zoom'),
                 scrollwheel: this.$map.data('scrollwheel'),
 
