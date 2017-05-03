@@ -371,7 +371,7 @@
                 return this.options.clusterIcons;
             }
 
-            var clusterIconSize = this.splitNumbers(this.options.clusterIconSize);
+            var clusterIconSize = this.splitValues(this.options.clusterIconSize);
 
             return [{
                 width: clusterIconSize[0], //=> actual image width
@@ -501,13 +501,13 @@
         },
 
         createSize: function (size) {
-            size = this.splitNumbers(size);
+            size = this.splitValues(size);
 
             return size ? new google.maps.Size(size[0], size[1]) : null;
         },
 
         createPoint: function (point) {
-            point = this.splitNumbers(point);
+            point = this.splitValues(point);
 
             return point ? new google.maps.Point(point[0], point[1]) : null;
         },
@@ -536,12 +536,16 @@
             return typeof window[className] === 'function' && typeof window[className].prototype === 'object';
         },
 
-        splitNumbers: function (values) {
+        splitValues: function (values) {
             if ( ! values) {
                 return null;
             }
 
-            return values.split(',');
+            values = values.split(',');
+
+            return values.map(function (value) {
+                return value.trim();
+            });
         },
 
         removeEmptyObjectProperties: function (obj) {
