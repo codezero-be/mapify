@@ -123,7 +123,7 @@
         this.map = null; //=> Google Map object
         this.markers = []; //=> Google Marker objects
         this.bounds = []; //=> Google Marker objects that should fit in the map
-        this.markerClusterer = null; //=> Google MarkerClusterer object
+        this.clusterer = null; //=> Google MarkerClusterer object
 
         this.init();
     }
@@ -135,7 +135,7 @@
             this.createMarkers();
             this.setMapOptions();
             this.fitBounds();
-            this.enableClustering();
+            this.enableClusters();
         },
 
         createMap: function () {
@@ -247,15 +247,20 @@
             }
         },
 
-        enableClustering: function () {
-            if (this.shouldDisableClustering()) {
+        //
+        //
+        // Clusters
+        //
+
+        enableClusters: function () {
+            if (this.shouldDisableClusters()) {
                 return;
             }
 
             // Requires markerclusterer.js
             // Docs: http://htmlpreview.github.io/?https://github.com/googlemaps/v3-utility-library/blob/master/markerclustererplus/docs/reference.html
 
-            this.markerClusterer = new MarkerClusterer(this.map, this.markers, {
+            this.clusterer = new MarkerClusterer(this.map, this.markers, {
                 title: this.options.clusterTitle,
                 averageCenter: this.options.clusterCenter,
                 gridSize: this.options.clusterGridSize,
@@ -267,12 +272,12 @@
                 styles: this.getClustersIconStyles()
             });
 
-            this.markerClusterer.addListener('click',     function(cluster) { this.onClusterClick(cluster);      }.bind(this));
-            this.markerClusterer.addListener('mouseover', function(cluster) { this.onClusterMouseEnter(cluster); }.bind(this));
-            this.markerClusterer.addListener('mouseout',  function(cluster) { this.onClusterMouseLeave(cluster); }.bind(this));
+            this.clusterer.addListener('click', this.onClusterClick.bind(this));
+            this.clusterer.addListener('mouseover', this.onClusterMouseEnter.bind(this));
+            this.clusterer.addListener('mouseout', this.onClusterMouseLeave.bind(this));
         },
 
-        shouldDisableClustering: function () {
+        shouldDisableClusters: function () {
             return ! this.classExists('MarkerClusterer') || this.options.clusters === false || this.markers.length < 2;
         },
 
