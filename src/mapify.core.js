@@ -152,7 +152,8 @@
             onClusterClick:           function (markers, cluster, map) { },
             onClusterMouseEnter:      function (markers, cluster, map) { },
             onClusterMouseLeave:      function (markers, cluster, map) { },
-            onSpiderMarkerFormat:     function (marker, markerStatus, map) { }
+            onSpiderMarkerFormat:     function (marker, markerStatus, map) { },
+            onInitialized:            function (markers, map, clusterer, spiderfier) { },
         };
 
     function Plugin (mapContainer, options) {
@@ -181,6 +182,7 @@
             this.setMapOptions();
             this.fitBounds();
             this.enableClusters();
+            this.onInitialized();
         },
 
         createMap: function () {
@@ -601,6 +603,10 @@
 
         onSpiderMarkerFormat: function (marker, markerStatus) {
             this.runUserCallback(this.options.onSpiderMarkerFormat, marker, marker, markerStatus, this.map);
+        },
+
+        onInitialized: function () {
+            this.runUserCallback(this.options.onSpiderMarkerFormat, this.map, this.markers, this.map, this.clusterer, this.spiderfier);
         },
 
         runUserCallback: function (callback, target) {
