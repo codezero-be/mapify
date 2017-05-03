@@ -142,18 +142,18 @@
             // The map and marker parameters are the Google Map and Marker objects.
             // You can access the related .map and .marker DOM elements as jQuery objects
             // via the property map.$map and marker.$marker
-            onMapClick:               function (map, event) { },
-            onMarkerClick:            function (marker, map, event) { },
-            onMarkerMouseEnter:       function (marker, map, event) { },
-            onMarkerMouseLeave:       function (marker, map, event) { },
-            onMarkerLegendClick:      function (marker, map, event) { },
-            onMarkerLegendMouseEnter: function (marker, map, event) { },
-            onMarkerLegendMouseLeave: function (marker, map, event) { },
-            onClusterClick:           function (markers, cluster, map) { },
-            onClusterMouseEnter:      function (markers, cluster, map) { },
-            onClusterMouseLeave:      function (markers, cluster, map) { },
-            onSpiderMarkerFormat:     function (marker, markerStatus, map) { },
-            onInitialized:            function (markers, map, clusterer, spiderfier) { },
+            onMapClick:                function (map, event) { },
+            onMarkerClick:             function (marker, map, event) { },
+            onMarkerMouseEnter:        function (marker, map, event) { },
+            onMarkerMouseLeave:        function (marker, map, event) { },
+            onMarkerElementClick:      function (marker, map, event) { },
+            onMarkerElementMouseEnter: function (marker, map, event) { },
+            onMarkerElementMouseLeave: function (marker, map, event) { },
+            onClusterClick:            function (markers, cluster, map) { },
+            onClusterMouseEnter:       function (markers, cluster, map) { },
+            onClusterMouseLeave:       function (markers, cluster, map) { },
+            onSpiderMarkerFormat:      function (marker, markerStatus, map) { },
+            onInitialized:             function (markers, map, clusterer, spiderfier) { },
         };
 
     function Plugin (mapContainer, options) {
@@ -199,9 +199,9 @@
 
             if (this.isUsingMarkerElements()) {
                 $(document)
-                    .on('click',      this.options.markers, this.onMarkerLegendClick.bind(this))
-                    .on('mouseenter', this.options.markers, this.onMarkerLegendMouseEnter.bind(this))
-                    .on('mouseleave', this.options.markers, this.onMarkerLegendMouseLeave.bind(this));
+                    .on('click',      this.options.markers, this.onMarkerElementClick.bind(this))
+                    .on('mouseenter', this.options.markers, this.onMarkerElementMouseEnter.bind(this))
+                    .on('mouseleave', this.options.markers, this.onMarkerElementMouseLeave.bind(this));
             }
         },
 
@@ -574,19 +574,19 @@
             this.runUserCallback(this.options.onMarkerMouseLeave, marker, marker, this.map, event);
         },
 
-        onMarkerLegendClick: function (event) {
+        onMarkerElementClick: function (event) {
             var marker = $(event.currentTarget).data('marker');
-            this.runUserCallback(this.options.onMarkerLegendClick, marker, marker, this.map, event);
+            this.runUserCallback(this.options.onMarkerElementClick, marker, marker, this.map, event);
         },
 
-        onMarkerLegendMouseEnter: function (event) {
+        onMarkerElementMouseEnter: function (event) {
             var marker = $(event.currentTarget).data('marker');
-            this.runUserCallback(this.options.onMarkerLegendMouseEnter, marker, marker, this.map, event);
+            this.runUserCallback(this.options.onMarkerElementMouseEnter, marker, marker, this.map, event);
         },
 
-        onMarkerLegendMouseLeave: function (event) {
+        onMarkerElementMouseLeave: function (event) {
             var marker = $(event.currentTarget).data('marker');
-            this.runUserCallback(this.options.onMarkerLegendMouseLeave, marker, marker, this.map, event);
+            this.runUserCallback(this.options.onMarkerElementMouseLeave, marker, marker, this.map, event);
         },
 
         onClusterClick: function (cluster) {
