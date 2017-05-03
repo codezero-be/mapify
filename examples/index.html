@@ -54,6 +54,20 @@
         <a href="#">marker</a>
     </li>
     <li class="marker"
+        data-lat="51.172448"
+        data-lng="4.336334"
+        data-label="A"
+        data-title="Hello World">
+        <a href="#">marker</a>
+    </li>
+    <li class="marker"
+        data-lat="51.172532"
+        data-lng="4.336079"
+        data-label="A"
+        data-title="Hello World">
+        <a href="#">marker</a>
+    </li>
+    <li class="marker"
         data-lat="51.172364"
         data-lng="4.336061"
         data-center="true"
@@ -73,23 +87,18 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="../src/vendor/markerclusterer.js"></script>
+<script src="../src/vendor/oms.min.js"></script>
 <script src="../src/mapify.core.js"></script>
 
 <script>
     function initMap() {
         $('.map').mapify({
             onMarkerClick: function (marker, map, event) {
-                console.log('clicked', marker, map);
+                console.log('clicked', marker, map, event);
             },
-            onClusterClick: function (markers, cluster, map) {
-                console.log('click', markers, cluster, map);
-            },
-            onClusterMouseEnter: function (markers, cluster, map) {
-                console.log('enter', markers, cluster, map);
-            },
-            onClusterMouseLeave: function (markers, cluster, map) {
-                console.log('leave', markers, cluster, map);
-            },
+            onSpiderMarkerFormat: function (marker, markerStatus, map) {
+                console.log('format', marker, markerStatus, map);
+            }
         });
     }
 </script>

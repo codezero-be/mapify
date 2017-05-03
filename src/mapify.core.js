@@ -96,6 +96,48 @@
                 };
             },
 
+            spiderfy: true, //=> enable marker spiderfier?
+            spiderClick: false, //=> handle click event on a marker that triggers spiderfier
+
+            // Add official or custom map types...
+            spiderLegColors: {
+                roadmap: '#444',
+                terrain: '#444',
+                satellite: '#fff',
+                hybrid: '#fff'
+            },
+            spiderLegColorsHighlighted: {
+                roadmap: '#f00',
+                terrain: '#f00',
+                satellite: '#f00',
+                hybrid: '#f00'
+            },
+
+            spiderfierOptions: {
+                markersWontMove: true, //=> set true for performance if markers will not be moved
+                markersWontHide: false, //=> set true for performance if markers will not be hidden
+                keepSpiderfied: true, //=> keep spider open when one of its markers is clicked
+                ignoreMapClick: false, //=> keep spider open when the map is clicked
+                nearbyDistance: 20,
+                circleSpiralSwitchover: 9,
+                legWeight: 2,
+
+                // With the "onSpiderMarkerFormat" event handler you can manipulate
+                // the marker based on its spider state (spiderfied/unspiderfied/...).
+                //
+                // Set this option to true if you only need to detect
+                // the "SPIDERFIED" and (initial) "UNSPIDERFIED" state changes.
+                // This will trigger the event on each affected marker when
+                // it is spiderfied and unspiderfied.
+                //
+                // Set this option to false if you need to detect
+                // the "SPIDERFIED", "SPIDERFIABLE" and "UNSPIDERFIABLE" states.
+                // This will **additionally** trigger the event on every marker
+                // when the map loads and zoom level changes.
+                // So setting this option to true is a performance boost!
+                basicFormatEvents: true
+            },
+
             // The following callbacks are available...
             // The map and marker parameters are the Google Map and Marker objects.
             // You can access the related .map and .marker DOM elements as jQuery objects
@@ -109,7 +151,8 @@
             onMarkerLegendMouseLeave: function (marker, map, event) { },
             onClusterClick:           function (markers, cluster, map) { },
             onClusterMouseEnter:      function (markers, cluster, map) { },
-            onClusterMouseLeave:      function (markers, cluster, map) { }
+            onClusterMouseLeave:      function (markers, cluster, map) { },
+            onSpiderMarkerFormat:     function (marker, markerStatus, map) { }
         };
 
     function Plugin (mapContainer, options) {
@@ -124,6 +167,7 @@
         this.markers = []; //=> Google Marker objects
         this.bounds = []; //=> Google Marker objects that should fit in the map
         this.clusterer = null; //=> Google MarkerClusterer object
+        this.spiderfier = null; //=> OverlappingMarkerSpiderfier object
 
         this.init();
     }
@@ -132,6 +176,7 @@
 
         init: function () {
             this.createMap();
+            this.enableSpiderfier();
             this.createMarkers();
             this.setMapOptions();
             this.fitBounds();
@@ -159,7 +204,9 @@
         },
 
         createMarker: function (markerOptions) {
-            var marker = new google.maps.Marker(
+            var clickEvent, marker;
+
+            marker = new google.maps.Marker(
                 this.removeEmptyObjectProperties({
                     position: this.createLatLng(markerOptions.lat, markerOptions.lng),
                     icon: this.normalizeIcon(markerOptions),
@@ -192,7 +239,13 @@
                 this.setCenterCoordinates(markerOptions.lat, markerOptions.lng);
             }
 
-            marker.addListener('click',     function(event) { this.onMarkerClick(marker, event);      }.bind(this));
+            if (this.spiderfier !== null) {
+                this.spiderfier.trackMarker(marker);
+            }
+
+            clickEvent = this.shouldHandleClickOnSpiderfy() ? 'click' : 'spider_click';
+
+            marker.addListener(clickEvent,  function(event) { this.onMarkerClick(marker, event);      }.bind(this));
             marker.addListener('mouseover', function(event) { this.onMarkerMouseEnter(marker, event); }.bind(this));
             marker.addListener('mouseout',  function(event) { this.onMarkerMouseLeave(marker, event); }.bind(this));
         },
@@ -248,6 +301,36 @@
         },
 
         //
+        // Spiderfier
+        //
+
+        enableSpiderfier: function () {
+            if (this.shouldDisableSpiderfier()) {
+                return;
+            }
+
+            // Requires oms.js (OverlappingMarkerSpiderfier)
+            // Docs: https://github.com/jawj/OverlappingMarkerSpiderfier
+
+            this.spiderfier = new OverlappingMarkerSpiderfier(this.map, this.options.spiderfierOptions);
+
+            $.each(this.options.spiderLegColors, function (index, mapType) {
+                var mapTypeId = google.maps.MapTypeId[mapType.toUpperCase()] || mapType;
+                this.spiderfier.legColors.usual[mapTypeId] = this.options.spiderLegColors[mapType] || '#444';
+                this.spiderfier.legColors.highlighted[mapTypeId] = this.options.spiderLegColorsHighlighted[mapType] || '#f00';
+            }.bind(this));
+
+            this.spiderfier.addListener('format', this.onSpiderMarkerFormat.bind(this));
+        },
+
+        shouldDisableSpiderfier: function () {
+            return ! this.classExists('OverlappingMarkerSpiderfier') || this.options.spiderfy === false;
+        },
+
+        shouldHandleClickOnSpiderfy: function () {
+            return this.spiderfier === null || this.options.spiderClick === true;
+        },
+
         //
         // Clusters
         //
@@ -389,6 +472,9 @@
                 fitbounds: this.$map.data('fitbounds'),
                 fitboundsPadding: this.$map.data('fitbounds-padding'),
 
+                spiderfy: this.$map.data('spiderfy'),
+                spiderClick: this.$map.data('spider-click'),
+
                 clusters: this.$map.data('clusters'),
                 clusterTitle: this.$map.data('cluster-title'),
                 clusterCenter: this.$map.data('cluster-center'),
@@ -511,6 +597,10 @@
 
         onClusterMouseLeave: function (cluster) {
             this.runUserCallback(this.options.onClusterMouseLeave, cluster, cluster.getMarkers(), cluster, this.map);
+        },
+
+        onSpiderMarkerFormat: function (marker, markerStatus) {
+            this.runUserCallback(this.options.onSpiderMarkerFormat, marker, marker, markerStatus, this.map);
         },
 
         runUserCallback: function (callback, target) {

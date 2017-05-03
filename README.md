@@ -36,6 +36,11 @@
     - [Cluster Icon Text Size](#cluster-icon-text-size)
     - [Multiple / Advanced Cluster Icons](#multiple-advanced-cluster-icons)
     - [Dynamic Cluster Text, Tooltip and Icon](#dynamic-cluster-text-tooltip-and-icon)
+- [Marker Spiderfier](#marker-spiderfier)
+- [Spiderfy Options](#spiderfy-options)
+    - [Trigger Marker Click Event when Spiderfying](#trigger-marker-click-event-when-spiderfying)
+    - [Spider Leg Colors](#spider-leg-colors)
+    - [Advanced Spiderfier Options](#advanced-spiderfier-options)
 
 ## Installation
 
@@ -587,6 +592,8 @@ With a data attribute:
 <div class="map" data-clusters="false"></div>
 ```
 
+By default, when marker clustering doesn't apply (beyond the maximum zoom level or when disabled), overlapping markers will be [spiderfied](#marker-spiderfier) instead. 
+
 ## Cluster Options
 
 You can set a number of cluster options **on the map**, with javascript or HTML data attributes.
@@ -769,4 +776,101 @@ function (markers, totalAvailableIcons) {
         title: title
     };
 }
+```
+
+## Marker Spiderfier
+
+**Default:** `true`
+
+By default, when the map is zoomed in to street level (15), markers that are too close to each other will no longer be clustered.
+Instead, the markers will be spiderfied. This will move the markers away from each other in a circular path so they can be clicked easily. 
+
+>   The Marker Spiderfier will only work when [OverlappingMarkerSpiderfier](https://github.com/jawj/OverlappingMarkerSpiderfier) is loaded. This script is already included in `mapify.min.js`.
+
+If you don't want to spiderfy markers, you can disable it.
+
+With javascript:
+
+```javascript
+$('.map').mapify({
+    spiderfy: false
+});
+```
+
+With a data attribute:
+
+```html
+<div class="map" data-spiderfy="false"></div>
+```
+
+## Spiderfy Options
+
+You can set a number of spiderfy options **on the map**, with javascript or HTML data attributes.
+
+### Trigger Marker Click Event when Spiderfying
+
+**Default:** `false`
+
+Trigger the click event on a marker even when it (un)spiderfies the markers in its vicinity.
+
+- `spiderClick: true` **(JavaScript)**
+- `data-spider-click="true"` **(HTML)**
+
+### Spider Leg Colors
+
+These options can only be set via javascript, as it would get a bit ugly with data attributes.
+
+Here are the default settings... You can also add custom map types.
+
+```javascript
+$('.map').mapify({
+    spiderLegColors: {
+        roadmap: '#444',
+        terrain: '#444',
+        satellite: '#fff',
+        hybrid: '#fff'
+    },
+    spiderLegColorsHighlighted: {
+        roadmap: '#f00',
+        terrain: '#f00',
+        satellite: '#f00',
+        hybrid: '#f00'
+    }
+});
+```
+
+## Advanced Spiderfier Options
+
+There are some advanced options for the Spiderfier that you can set via javascript.
+This options accepts any constructor option from [OverlappingMarkerSpiderfier](https://github.com/jawj/OverlappingMarkerSpiderfier#construction).
+
+Your options will be merged with these defaults:
+
+```javascript
+$('.map').mapify({
+    spiderfierOptions: {
+        markersWontMove: true, //=> set true for performance if markers will not be moved
+        markersWontHide: false, //=> set true for performance if markers will not be hidden
+        keepSpiderfied: true, //=> keep spider open when one of its markers is clicked
+        ignoreMapClick: false, //=> keep spider open when the map is clicked
+        nearbyDistance: 20,
+        circleSpiralSwitchover: 9,
+        legWeight: 2,
+    
+        // With the "onSpiderMarkerFormat" event handler you can manipulate
+        // the marker based on its spider state (spiderfied/unspiderfied/...).
+        //
+        // Set this option to true if you only need to detect
+        // the "SPIDERFIED" and (initial) "UNSPIDERFIED" state changes.
+        // This will trigger the event on each affected marker when
+        // it is spiderfied and unspiderfied.
+        //
+        // Set this option to false if you need to detect
+        // the "SPIDERFIED", "SPIDERFIABLE" and "UNSPIDERFIABLE" states.
+        // This will **additionally** trigger the event on every marker
+        // when the map loads and zoom level changes.
+        // So setting this option to true is a performance boost!
+        basicFormatEvents: true
+    }
+});
 ```
