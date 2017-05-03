@@ -259,7 +259,7 @@
                     gestureHandling: this.options.gestures,
                     zoom: this.options.zoom,
                     scrollwheel: this.options.scrollwheel,
-                    mapTypeId: google.maps.MapTypeId[this.options.mapType.toUpperCase()],
+                    mapTypeId: google.maps.MapTypeId[this.options.mapType.toUpperCase()] || this.options.mapType,
                     backgroundColor: this.options.backgroundColor,
                     styles: this.options.styles
                 })
