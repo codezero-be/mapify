@@ -22,6 +22,15 @@
             // - 'hybrid' //=> this is actually a sub menu of satellite
             mapTypes: ['roadmap'],
 
+            // Possible controls: (accepts an array or comma separated string)
+            // - 'zoom'
+            // - 'fullscreen'
+            // - 'streetview'
+            // - 'rotate'
+            // - 'scale'
+            // The mapTypeControl is enabled automatically if you set more than one mapType.
+            controls: ['zoom'],
+
             // Custom map styles...
             // Find premade themes on https://snazzymaps.com/
             styles: null,
@@ -176,7 +185,7 @@
     $.extend(Plugin.prototype, {
 
         init: function () {
-            this.normalizeMapTypes();
+            this.normalizeOptions();
             this.createMap();
             this.enableSpiderfier();
             this.createMarkers();
@@ -186,20 +195,29 @@
             this.onInitialized();
         },
 
-        normalizeMapTypes: function () {
-            var mapTypes = this.options.mapTypes;
+        normalizeOptions: function () {
+            this.options.mapTypes = this.convertOptionToArray(this.options.mapTypes, ['roadmap'],
+                function (mapType) {
+                    return google.maps.MapTypeId[mapType.toUpperCase()] || mapType;
+                }
+            );
+            this.options.controls = this.convertOptionToArray(this.options.controls, [],
+                function (control) {
+                    return control.toLowerCase();
+                }
+            );
+        },
 
-            if (this.isEmpty(mapTypes)) {
-                mapTypes = ['roadmap'];
+        convertOptionToArray: function (option, defaultValue, conversionCallable) {
+            if (this.isEmpty(option)) {
+                option = defaultValue;
             }
 
-            if ( ! this.isArray(mapTypes)) {
-                mapTypes = this.splitValues(mapTypes);
+            if ( ! this.isArray(option)) {
+                option = this.splitValues(option);
             }
 
-            return this.options.mapTypes = mapTypes.map(function (mapType) {
-                return google.maps.MapTypeId[mapType.toUpperCase()] || mapType;
-            })
+            return option.map(conversionCallable);
         },
 
         createMap: function () {
@@ -276,13 +294,20 @@
                     gestureHandling: this.options.gestures,
                     zoom: this.options.zoom,
                     scrollwheel: this.options.scrollwheel,
+                    backgroundColor: this.options.backgroundColor,
+                    styles: this.options.styles,
                     mapTypeId: this.options.mapTypes[0],
+                    // Controls...
                     mapTypeControl: this.options.mapTypes.length > 1,
+                    zoomControl: this.isControlEnabled('zoom'),
+                    fullscreenControl: this.isControlEnabled('fullscreen'),
+                    streetViewControl: this.isControlEnabled('streetview'),
+                    rotateControl: this.isControlEnabled('rotate'),
+                    scaleControl: this.isControlEnabled('scale'),
+                    // Control options...
                     mapTypeControlOptions: {
                         mapTypeIds: this.options.mapTypes
-                    },
-                    backgroundColor: this.options.backgroundColor,
-                    styles: this.options.styles
+                    }
                 })
             );
         },
@@ -485,6 +510,7 @@
                 gestures: this.$map.data('gestures'),
                 zoom: this.$map.data('zoom'),
                 scrollwheel: this.$map.data('scrollwheel'),
+                controls: this.$map.data('controls'),
 
                 icon: this.$map.data('icon'),
                 iconSize: this.$map.data('icon-size'),
@@ -542,6 +568,10 @@
 
         isUsingMarkerElements: function () {
             return this.isString(this.options.markers);
+        },
+
+        isControlEnabled: function (control) {
+            return this.options.controls.indexOf(control) > -1;
         },
 
         isEmpty: function (value) {

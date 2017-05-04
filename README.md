@@ -14,6 +14,7 @@
     - [Zoom on Scroll](#zoom-on-scroll)
     - [Map Background Color](#map-background-color)
     - [Map Types](#map-types)
+    - [Map Controls](#map-controls)
     - [Custom Map Styles](#custom-map-styles)
     - [Custom Marker Icons](#custom-marker-icons)
     - [Marker Label and Title](#marker-label-and-title)
@@ -376,6 +377,37 @@ Or with a data attribute:
 
 ````html
 <div class="map" data-map-types="roadmap,satellite"></div>
+````
+
+### Map Controls
+
+**Default:** `'zoom'`
+
+The UI controls you want to enable. This can be a comma separated string or an array.
+If you want to disable all controls, set an empty string or array or just `'none'` as the value.
+
+> **Note:** The `mapTypeControl` is enabled automatically if you set more than one value in the `mapTypes` option.
+
+Available controls:
+
+- `'zoom'`
+- `'fullscreen'`
+- `'streetview'`
+- `'rotate'`
+- `'scale'`
+
+Set it via javascript:
+
+```javascript
+$('.map').mapify({
+    controls: ['zoom', 'fullscreen']
+});
+```
+
+Or with a data attribute:
+
+````html
+<div class="map" data-controls="zoom,fullscreen"></div>
 ````
 
 ### Custom Map Styles
