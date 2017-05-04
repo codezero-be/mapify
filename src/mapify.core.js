@@ -545,7 +545,7 @@
         },
 
         isEmpty: function (value) {
-            return value === null || value === undefined || (this.isArray(value) && value.length === 0);
+            return value === null || value === undefined || value.length === undefined || value.length === 0;
         },
 
         isString: function (value) {
