@@ -316,10 +316,10 @@
 
             this.spiderfier = new OverlappingMarkerSpiderfier(this.map, this.options.spiderfierOptions);
 
-            $.each(this.options.spiderLegColors, function (index, mapType) {
-                var mapTypeId = google.maps.MapTypeId[mapType.toUpperCase()] || mapType;
-                this.spiderfier.legColors.usual[mapTypeId] = this.options.spiderLegColors[mapType] || '#444';
-                this.spiderfier.legColors.highlighted[mapTypeId] = this.options.spiderLegColorsHighlighted[mapType] || '#f00';
+            $.each(this.options.spiderLegColors, function (index, mapTypeId) {
+                mapTypeId = mapTypeId.toLowerCase();
+                this.spiderfier.legColors.usual[mapTypeId] = this.options.spiderLegColors[mapTypeId] || '#444';
+                this.spiderfier.legColors.highlighted[mapTypeId] = this.options.spiderLegColorsHighlighted[mapTypeId] || '#f00';
             }.bind(this));
 
             this.spiderfier.addListener('format', this.onSpiderMarkerFormat.bind(this));
