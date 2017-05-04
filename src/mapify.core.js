@@ -326,14 +326,14 @@
         //
         // Spiderfier
         //
+        // Requires vendor/oms.js (OverlappingMarkerSpiderfier)
+        // Docs: https://github.com/jawj/OverlappingMarkerSpiderfier
+        //
 
         enableSpiderfier: function () {
             if (this.shouldDisableSpiderfier()) {
                 return;
             }
-
-            // Requires oms.js (OverlappingMarkerSpiderfier)
-            // Docs: https://github.com/jawj/OverlappingMarkerSpiderfier
 
             this.spiderfier = new OverlappingMarkerSpiderfier(this.map, this.options.spiderfierOptions);
 
@@ -356,14 +356,14 @@
         //
         // Clusters
         //
+        // Requires vendor/markerclusterer.js (Google Maps MarkerClustererPlus)
+        // Docs: http://htmlpreview.github.io/?https://github.com/googlemaps/v3-utility-library/blob/master/markerclustererplus/docs/reference.html
+        //
 
         enableClusters: function () {
             if (this.shouldDisableClusters()) {
                 return;
             }
-
-            // Requires markerclusterer.js
-            // Docs: http://htmlpreview.github.io/?https://github.com/googlemaps/v3-utility-library/blob/master/markerclustererplus/docs/reference.html
 
             this.clusterer = new MarkerClusterer(this.map, this.markers, {
                 title: this.options.clusterTitle,
