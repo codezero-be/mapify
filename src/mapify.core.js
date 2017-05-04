@@ -176,6 +176,7 @@
     $.extend(Plugin.prototype, {
 
         init: function () {
+            this.normalizeMapTypes();
             this.createMap();
             this.enableSpiderfier();
             this.createMarkers();
@@ -183,6 +184,22 @@
             this.fitBounds();
             this.enableClusters();
             this.onInitialized();
+        },
+
+        normalizeMapTypes: function () {
+            var mapTypes = this.options.mapTypes;
+
+            if (this.isEmpty(mapTypes)) {
+                mapTypes = ['roadmap'];
+            }
+
+            if ( ! this.isArray(mapTypes)) {
+                mapTypes = this.splitValues(mapTypes);
+            }
+
+            return this.options.mapTypes = mapTypes.map(function (mapType) {
+                return google.maps.MapTypeId[mapType.toUpperCase()] || mapType;
+            })
         },
 
         createMap: function () {
@@ -253,39 +270,21 @@
         },
 
         setMapOptions: function () {
-            var mapTypes = this.getMapTypes().map(function (mapType) {
-                return mapType.toLowerCase();
-            });
-
             this.map.setOptions(
                 this.removeEmptyObjectProperties({
                     center: this.getMapCenterPosition(),
                     gestureHandling: this.options.gestures,
                     zoom: this.options.zoom,
                     scrollwheel: this.options.scrollwheel,
-                    mapTypeId: mapTypes[0],
-                    mapTypeControl: mapTypes.length > 1,
+                    mapTypeId: this.options.mapTypes[0],
+                    mapTypeControl: this.options.mapTypes.length > 1,
                     mapTypeControlOptions: {
-                        mapTypeIds: mapTypes
+                        mapTypeIds: this.options.mapTypes
                     },
                     backgroundColor: this.options.backgroundColor,
                     styles: this.options.styles
                 })
             );
-        },
-
-        getMapTypes: function () {
-            var mapTypes = this.options.mapTypes;
-
-            if (this.isEmpty(mapTypes)) {
-                return this.options.mapTypes = ['roadmap'];
-            }
-
-            if (this.isArray(mapTypes)) {
-                return mapTypes;
-            }
-
-            return this.options.mapTypes = this.splitValues(mapTypes);
         },
 
         getMapCenterPosition: function () {
@@ -338,8 +337,7 @@
 
             this.spiderfier = new OverlappingMarkerSpiderfier(this.map, this.options.spiderfierOptions);
 
-            $.each(this.options.spiderLegColors, function (index, mapTypeId) {
-                mapTypeId = mapTypeId.toLowerCase();
+            $.each(this.options.mapTypes, function (index, mapTypeId) {
                 this.spiderfier.legColors.usual[mapTypeId] = this.options.spiderLegColors[mapTypeId] || '#444';
                 this.spiderfier.legColors.highlighted[mapTypeId] = this.options.spiderLegColorsHighlighted[mapTypeId] || '#f00';
             }.bind(this));
