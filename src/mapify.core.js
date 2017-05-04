@@ -15,12 +15,12 @@
             centerLng: null,
             backgroundColor: '#ffffff', //=> background color of the map, visible when tiles are not yet loaded
 
-            // Possible map types:
+            // Possible map types: (accepts an array or comma separated string)
             // - 'roadmap'
             // - 'terrain' //=> this is actually a sub menu of roadmap
             // - 'satellite'
             // - 'hybrid' //=> this is actually a sub menu of satellite
-            mapTypes: 'roadmap',
+            mapTypes: ['roadmap'],
 
             // Custom map styles...
             // Find premade themes on https://snazzymaps.com/

@@ -13,7 +13,7 @@
     - [Zoom Level](#zoom-level)
     - [Zoom on Scroll](#zoom-on-scroll)
     - [Map Background Color](#map-background-color)
-    - [Map Type](#map-type)
+    - [Map Types](#map-types)
     - [Custom Map Styles](#custom-map-styles)
     - [Custom Marker Icons](#custom-marker-icons)
     - [Marker Label and Title](#marker-label-and-title)
@@ -355,24 +355,27 @@ Or with a data attribute:
 The available map types you want the user to be able to switch between.
 This can be a comma separated string or an array.
 The first type is the initial map type to show.
-If you only set one type, the UI element will be hidden.
+If you only set one type, the UI control will be hidden.
 
-The standard map types are:
+Available map types:
 
-- `roadmap,terrain,satellite,hybrid`
+- `'roadmap'`
+- `'terrain'`
+- `'satellite'`
+- `'hybrid'`
 
 Set it via javascript:
 
 ```javascript
 $('.map').mapify({
-    mapTypes: 'roadmap'
+    mapTypes: ['roadmap', 'satellite']
 });
 ```
 
 Or with a data attribute:
 
 ````html
-<div class="map" data-map-types="roadmap"></div>
+<div class="map" data-map-types="roadmap,satellite"></div>
 ````
 
 ### Custom Map Styles
