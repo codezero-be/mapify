@@ -16,11 +16,11 @@
             backgroundColor: '#ffffff', //=> background color of the map, visible when tiles are not yet loaded
 
             // Possible map types:
-            // - roadmap
-            // - terrain
-            // - satellite
-            // - hybrid
-            mapType: 'roadmap',
+            // - 'roadmap'
+            // - 'terrain' //=> this is actually a sub menu of roadmap
+            // - 'satellite'
+            // - 'hybrid' //=> this is actually a sub menu of satellite
+            mapTypes: 'roadmap',
 
             // Custom map styles...
             // Find premade themes on https://snazzymaps.com/
@@ -253,17 +253,39 @@
         },
 
         setMapOptions: function () {
+            var mapTypes = this.getMapTypes().map(function (mapType) {
+                return mapType.toLowerCase();
+            });
+
             this.map.setOptions(
                 this.removeEmptyObjectProperties({
                     center: this.getMapCenterPosition(),
                     gestureHandling: this.options.gestures,
                     zoom: this.options.zoom,
                     scrollwheel: this.options.scrollwheel,
-                    mapTypeId: google.maps.MapTypeId[this.options.mapType.toUpperCase()] || this.options.mapType,
+                    mapTypeId: mapTypes[0],
+                    mapTypeControl: mapTypes.length > 1,
+                    mapTypeControlOptions: {
+                        mapTypeIds: mapTypes
+                    },
                     backgroundColor: this.options.backgroundColor,
                     styles: this.options.styles
                 })
             );
+        },
+
+        getMapTypes: function () {
+            var mapTypes = this.options.mapTypes;
+
+            if (this.isEmpty(mapTypes)) {
+                return this.options.mapTypes = ['roadmap'];
+            }
+
+            if (this.isArray(mapTypes)) {
+                return mapTypes;
+            }
+
+            return this.options.mapTypes = this.splitValues(mapTypes);
         },
 
         getMapCenterPosition: function () {
@@ -522,6 +544,10 @@
 
         isUsingMarkerElements: function () {
             return this.isString(this.options.markers);
+        },
+
+        isEmpty: function (value) {
+            return value === null || value === undefined || (this.isArray(value) && value.length === 0);
         },
 
         isString: function (value) {

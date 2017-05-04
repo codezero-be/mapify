@@ -348,29 +348,31 @@ Or with a data attribute:
 <div class="map" data-background-color="#ffffff"></div>
 ````
 
-### Map Type
+### Map Types
 
 **Default:** `'roadmap'`
 
-The initial map type to show.
+The available map types you want the user to be able to switch between.
+This can be a comma separated string or an array.
+The first type is the initial map type to show.
+If you only set one type, the UI element will be hidden.
 
-- `roadmap`
-- `terrain`
-- `satellite`
-- `hybrid`
+The standard map types are:
+
+- `roadmap,terrain,satellite,hybrid`
 
 Set it via javascript:
 
 ```javascript
 $('.map').mapify({
-    mapType: 'roadmap'
+    mapTypes: 'roadmap'
 });
 ```
 
 Or with a data attribute:
 
 ````html
-<div class="map" data-map-type="roadmap"></div>
+<div class="map" data-map-types="roadmap"></div>
 ````
 
 ### Custom Map Styles
