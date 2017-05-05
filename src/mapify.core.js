@@ -151,6 +151,7 @@
             // The map and marker parameters are the Google Map and Marker objects.
             // You can access the related .map and .marker DOM elements as jQuery objects
             // via the property map.$map and marker.$marker
+            onInitialized:             function (map, markers, clusterer, spiderfier) { },
             onMapClick:                function (map, event) { },
             onMarkerClick:             function (marker, map, event) { },
             onMarkerMouseEnter:        function (marker, map, event) { },
@@ -161,8 +162,7 @@
             onClusterClick:            function (markers, cluster, map) { },
             onClusterMouseEnter:       function (markers, cluster, map) { },
             onClusterMouseLeave:       function (markers, cluster, map) { },
-            onSpiderMarkerFormat:      function (marker, markerStatus, map) { },
-            onInitialized:             function (markers, map, clusterer, spiderfier) { },
+            onSpiderMarkerFormat:      function (marker, markerStatus, map) { }
         };
 
     function Plugin (mapContainer, options) {
@@ -664,7 +664,7 @@
         },
 
         onInitialized: function () {
-            this.runUserCallback(this.options.onSpiderMarkerFormat, this.map, this.markers, this.map, this.clusterer, this.spiderfier);
+            this.runUserCallback(this.options.onSpiderMarkerFormat, this.map, this.map, this.markers, this.clusterer, this.spiderfier);
         },
 
         runUserCallback: function (callback, target) {
