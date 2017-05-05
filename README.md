@@ -2,6 +2,7 @@
 
 ## Contents
 
+- [Third Party Libraries](#third-party-libraries)
 - [Installation](#installation)
 - [The Big Picture](#the-big-picture)
 - [Creating a Map](#creating-a-map)
@@ -24,13 +25,13 @@
     - [Fit Markers on the Map with Extra Padding](#fit-markers-on-the-map-with-extra-padding)
 - [Marker Clustering](#marker-clustering)
 - [Cluster Options](#cluster-options)
-    - [Browser Tooltip](#browser-tooltip)
+    - [Cluster Tooltip](#cluster-tooltip)
     - [Center Cluster Icon](#center-cluster-icon)
     - [Cluster Grid Size](#cluster-grid-size)
     - [Cluster Min Size](#cluster-min-size)
     - [Cluster Max Zoom](#cluster-max-zoom)
     - [Cluster Zoom on Click](#cluster-zoom-on-click)
-    - [Enable Cluster Retina Icons](#enable-cluster-retina-icons)
+    - [Cluster Retina Icons](#cluster-retina-icons)
     - [Cluster Icon](#cluster-icon)
     - [Cluster Icon Size](#cluster-icon-size)
     - [Cluster Icon Text Color](#cluster-icon-text-color)
@@ -42,6 +43,19 @@
     - [Trigger Marker Click Event when Spiderfying](#trigger-marker-click-event-when-spiderfying)
     - [Spider Leg Colors](#spider-leg-colors)
     - [Advanced Spiderfier Options](#advanced-spiderfier-options)
+
+## Third Party Libraries
+
+This plugin requires a few 3rd party libraries to fully function.
+
+- [jQuery](https://jquery.com/)
+- [Google Maps API](https://developers.google.com/maps/)
+
+The following packages are compiled into the main plugin version (`mapify.min.js`),
+but if you want you can download the scripts manually and use the core plugin version (`mapify.core.min.js`) instead.
+
+- [Google Maps MarkerClustererPlus](http://htmlpreview.github.io/?https://github.com/googlemaps/v3-utility-library/blob/master/markerclustererplus/docs/reference.html)
+- [OverlappingMarkerSpiderfier](https://github.com/jawj/OverlappingMarkerSpiderfier)
 
 ## Installation
 
@@ -59,7 +73,7 @@ npm install codezero-mapify --save
 
 ### Include Scripts
 
-You probably want to [create an API key](https://developers.google.com/maps/documentation/javascript/get-api-key) to work with the Google Maps API. You can use the API without a key, but there will be a warning in the console window.
+You probably want to [create an API key](https://developers.google.com/maps/documentation/javascript/get-api-key) to work with the Google Maps API. You can use the API without a key, but there will be a warning in the console window and I don't know what restrictions apply.
 
 ```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -74,7 +88,7 @@ You probably want to [create an API key](https://developers.google.com/maps/docu
 <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY_HERE&callback=initMap" async defer></script>
 ```
 
->   The `initMap` function will be called when the Google Maps script is loaded asynchronously.
+>   The `initMap` function will be called when the Google Maps script is loaded.
 
 ### Apply Basic Styling
 
@@ -249,25 +263,17 @@ Or by adding a `data-center` attribute to a marker element:
 
 ### Gesture Handling
 
-**Default:** `cooperative`
+**Default:** `'cooperative'`
 
 Straight from the Google Maps documentation:
 
-#####`'none'`
+`'none'`: The map cannot be panned or zoomed by user gestures.
 
-The map cannot be panned or zoomed by user gestures.
+`'greedy'`: All touch gestures pan or zoom the map.
 
-#####`'greedy'`
+`'cooperative'`: Two-finger touch gestures pan and zoom the map. One-finger touch gestures are not handled by the map. In this mode, the map cooperates with the page, so that one-finger touch gestures can pan the page.
 
-All touch gestures pan or zoom the map.
-
-#####`'cooperative'`
-
-Two-finger touch gestures pan and zoom the map. One-finger touch gestures are not handled by the map. In this mode, the map cooperates with the page, so that one-finger touch gestures can pan the page.
-
-#####`'auto'`
-
-Gesture handling is either cooperative or greedy, depending on whether the page is scrollable or not.
+`'auto'`: Gesture handling is either cooperative or greedy, depending on whether the page is scrollable or not.
 
 Set one of the above values with javascript:
 
@@ -287,7 +293,8 @@ Or with a data attribute:
 
 **Default:** `15`
 
-The initial zoom level can be set to a value between 1 and 20, where 1 is the most zoomed out. This option has no effect while the `fitbounds` option is set to `true`.
+The initial zoom level can be set to a value between 1 and 20, where 1 is the most zoomed out.
+This option has no effect while the `fitbounds` option is set to `true` (see: [Fit Markers on the Map](#fit-markers-on-the-map)).
 
 - 1: World
 - 5: Landmass/continent
@@ -611,7 +618,7 @@ With a data attribute:
 
 When 2 or more markers are too close and would overlap, those markers will be replaced by a new cluster icon, showing how many markers there are in that area. Clicking the cluster will zoom in and fit its markers on the map.
 
->   Marker clustering will only work when [`markerclusterer.js`](https://github.com/googlemaps/v3-utility-library/blob/master/markerclusterer/src/markerclusterer.js) is loaded. This script is already included in `mapify.min.js`.
+>   Marker clustering will only work when [`markerclusterer.js`](https://github.com/googlemaps/v3-utility-library/blob/master/markerclustererplus/src/markerclusterer.js) is loaded. This script is already included in `mapify.min.js`.
 
 If you don't want marker clustering, you can disable it.
 
@@ -635,7 +642,7 @@ By default, when marker clustering doesn't apply (beyond the maximum zoom level 
 
 You can set a number of cluster options **on the map**, with javascript or HTML data attributes.
 
-### Browser Tooltip
+### Cluster Tooltip
 
 **Default:** `''` (no tooltip)
 
@@ -690,7 +697,7 @@ When you click on a cluster icon, zoom in to fit the cluster's markers on the ma
 
 -   `data-cluster-zoom-on-click="true"` **(HTML)**
 
-### Enable Cluster Retina Icons
+### Cluster Retina Icons
 
 **Default:** `true`
 
