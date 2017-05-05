@@ -450,7 +450,7 @@
                 return this.normalizeMarkerElements();
             }
 
-            if (this.isArray(this.optios.markers)) {
+            if (this.isArray(this.options.markers)) {
                 return this.options.markers;
             }
 
