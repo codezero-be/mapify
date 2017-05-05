@@ -178,6 +178,7 @@
         this.bounds = []; //=> Google Marker objects that should fit in the map
         this.clusterer = null; //=> Google MarkerClusterer object
         this.spiderfier = null; //=> OverlappingMarkerSpiderfier object
+        this.infoWindow = new google.maps.InfoWindow();
 
         this.init();
     }
@@ -249,6 +250,7 @@
                     icon: this.normalizeIcon(markerOptions),
                     label: markerOptions.label,
                     title: markerOptions.title,
+                    infoWindow: markerOptions.infoWindow,
                     map: this.map
                 })
             );
@@ -479,6 +481,7 @@
                 iconAnchor: $marker.data('icon-anchor'),
                 label: $marker.data('label'),
                 title: $marker.data('title'),
+                infoWindow: $marker.data('info-window'),
                 $marker: $marker
             });
         },
@@ -536,6 +539,51 @@
                 clusterTextColor: this.$map.data('cluster-text-color'),
                 clusterTextSize: this.$map.data('cluster-text-size')
             });
+        },
+
+        //
+        // InfoWindow
+        //
+
+        closeInfoWindow: function () {
+            this.infoWindow.close();
+        },
+
+        openInfoWindow: function (marker) {
+            var content = this.getInfoWindowContent(marker);
+
+            this.closeInfoWindow();
+
+            if (content !== null) {
+                this.infoWindow.setContent(content);
+                this.infoWindow.open(this.map, marker);
+            }
+        },
+
+        getInfoWindowContent: function (marker) {
+            var content = null;
+
+            if (this.isString(marker.infoWindow)) {
+                content = this.getInfoWindowSelectorContent(marker.infoWindow.trim());
+            }
+
+            return content || this.getInfoWindowChildElementContent(marker.$marker);
+        },
+
+        getInfoWindowSelectorContent: function (infoWindowContent) {
+            if (infoWindowContent.substr(0, 1) === '.' || infoWindowContent.substr(0, 1) === '#') {
+                return $(infoWindowContent).html() || null;
+            }
+
+            return infoWindowContent.length > 0 ? infoWindowContent : null;
+        },
+
+        getInfoWindowChildElementContent: function ($marker) {
+            if ($marker) {
+                return $marker.find('.info-window').html() || null;
+            }
+
+            return null;
         },
 
         //
@@ -617,10 +665,12 @@
         //
 
         onMapClick: function (event) {
+            this.closeInfoWindow();
             this.runUserCallback(this.options.onMapClick, this.map, this.map, event);
         },
 
         onMarkerClick: function (marker, event) {
+            this.openInfoWindow(marker);
             this.runUserCallback(this.options.onMarkerClick, marker, marker, this.map, event);
         },
 

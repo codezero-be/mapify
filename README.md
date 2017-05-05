@@ -43,6 +43,11 @@
     - [Trigger Marker Click Event when Spiderfying](#trigger-marker-click-event-when-spiderfying)
     - [Spider Leg Colors](#spider-leg-colors)
     - [Advanced Spiderfier Options](#advanced-spiderfier-options)
+- [Info Window](#info-window)
+    - [Inline Info Window](#inline-info-window)
+    - [Info Window via Selector](#info-window-via-selector)
+    - [Automatically Detect Info Window](#automatically-detect-info-window)
+    - [Single Info Window on the Map](#single-info-window-on-the-map)
 
 ## Third Party Libraries
 
@@ -917,4 +922,114 @@ $('.map').mapify({
         basicFormatEvents: true
     }
 });
+```
+
+## Info Window
+
+**Default:** none
+
+You can display some text or HTML content in a dedicated info window, that pops open when you click on a marker.
+
+### Inline Info Window
+
+Probably the least attractive method is to write the HTML in a javascript string.
+The entire HTML string will be the value of the info window.
+An empty string will be ignored.
+
+```javascript
+$('.map').mapify({
+    markers: [
+        { lat: 51.251245, lng: 4.497890, infoWindow: '<p>INFO</p>' }
+    ]
+});
+```
+
+You can't really write HTML in a data attribute, but you could get away with some simple text...
+Do note that strings starting with a `.` or `#` are handled as [selectors](#info-window-via-selector). 
+As usual, the data attribute will override the javascript setting.
+
+````html
+<ul id="map-markers">
+    <li class="marker"
+        data-lat="51.251245"
+        data-lng="4.497890"
+        data-info-window="Very basic info...">
+        Marker A
+    </li>
+</ul>
+````
+
+### Info Window via Selector
+
+A slightly better approach is to create any `<div>` on your page and pass it with a selector.
+If you don't want to show the info window on the page, simply hide it with CSS `display: none`.
+The **contents** of the `<div>` will be used as the value for the info window.
+A non-existent selector will be ignored, as long as it starts with a `.` or `#`.
+
+````html
+<div id="my-info-window">
+    <p>INFO</p>
+</div>
+````
+
+Via javascript:
+
+```javascript
+$('.map').mapify({
+    markers: [
+        { lat: 51.251245, lng: 4.497890, infoWindow: '#my-info-window' }
+    ]
+});
+```
+
+Or via a data attribute:
+
+````html
+<ul id="map-markers">
+    <li class="marker"
+        data-lat="51.251245"
+        data-lng="4.497890"
+        data-info-window="#my-info-window">
+        Marker A
+    </li>
+</ul>
+````
+
+### Automatically Detect Info Window
+
+The easiest way to create your info window is to add an element inside of your `.marker` and give it the `info-window` class.
+The **contents** of the `<div>` will be used as the value for the info window.
+You can hide the element with CSS `display: none` if you don't want to show it on your page.
+
+We only check for this element when the previous options fail.
+
+````html
+<ul id="map-markers">
+    <li class="marker" data-lat="51.251245" data-lng="4.497890">
+        Marker A
+        <div class="info-window">
+            <p>My info window!</p>
+        </div>
+    </li>
+</ul>
+````
+
+### Single Info Window on the Map
+
+If you have set only one `lat` and `lng` on the map and you are not using multiple markers, you can also add the `infoWindow` option to it.
+
+With javascript:
+
+```javascript
+$('.map').mapify({
+    lat: 51.251245,
+    lng: 4.497890,
+    infoWindow: '#my-info-window'
+});
+```
+
+With a data attribute:
+
+```html
+<div class="map" data-lat="51.251245" data-lng="4.497890" data-info-window="#my-info-window"></div>
 ```
