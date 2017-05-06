@@ -52,6 +52,7 @@
     - [Info Window Max Width](#info-window-max-width)
     - [Info Window Groups](#info-window-groups)
     - [Open Info Window on Load](#open-info-window-on-load)
+    - [Open Info Window on Click or Hover (Marker Object)](#open-info-window-on-click-or-hover-marker-object)
     - [Close Info Windows on Map Click](#close-info-windows-on-map-click)
 
 ## Third Party Libraries
@@ -1159,6 +1160,32 @@ Or via a data attribute:
     </li>
 </ul>
 ````
+
+### Open Info Window on Click or Hover (Marker Object)
+
+**Default:** `'click'`
+
+By default, when you click on a marker, its info window will pop up (if any).
+Alternatively, you can choose to show the info window when you hover over a marker instead.
+
+Possible values:
+
+- `'click'`
+- `'hover'`
+
+With javascript:
+
+```javascript
+$('.map').mapify({
+    infoWindowTriggerMarker: 'hover'
+});
+```
+
+With a data attribute:
+
+```html
+<div class="map" data-info-window-trigger-marker="hover"></div>
+```
 
 ### Close Info Windows on Map Click
 

@@ -148,6 +148,7 @@
             },
 
             closeInfoWindowsOnMapClick: true,
+            infoWindowTriggerMarker: 'click',
             infoWindowMaxWidth: null,
 
             // The class to look for under a marker element
@@ -544,6 +545,7 @@
                 iconAnchor: this.$map.data('icon-anchor'),
 
                 closeInfoWindowsOnMapClick: this.$map.data('close-info-windows-on-map-click'),
+                infoWindowTriggerMarker: this.$map.data('info-window-trigger-marker'),
                 infoWindowMaxWidth: this.$map.data('info-window-max-width'),
 
                 fitbounds: this.$map.data('fitbounds'),
@@ -737,15 +739,23 @@
         },
 
         onMarkerClick: function (marker, event) {
-            this.openInfoWindow(marker);
+            if (this.options.infoWindowTriggerMarker === 'click') {
+                this.openInfoWindow(marker);
+            }
             this.runUserCallback(this.options.onMarkerClick, marker, marker, this.map, event);
         },
 
         onMarkerMouseEnter: function (marker, event) {
+            if (this.options.infoWindowTriggerMarker === 'hover') {
+                this.openInfoWindow(marker);
+            }
             this.runUserCallback(this.options.onMarkerMouseEnter, marker, marker, this.map, event);
         },
 
         onMarkerMouseLeave: function (marker, event) {
+            if (this.options.infoWindowTriggerMarker === 'hover') {
+                this.closeInfoWindows(marker);
+            }
             this.runUserCallback(this.options.onMarkerMouseLeave, marker, marker, this.map, event);
         },
 
