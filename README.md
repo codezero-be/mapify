@@ -48,7 +48,7 @@
     - [Info Window via Selector](#info-window-via-selector)
     - [Automatically Detect Info Window](#automatically-detect-info-window)
     - [Single Info Window on the Map](#single-info-window-on-the-map)
-- [Info Window Options](#info-window=options)
+- [Info Window Options](#info-window-options)
     - [Info Window Max Width](#info-window-max-width)
 
 ## Third Party Libraries
