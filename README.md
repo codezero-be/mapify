@@ -52,6 +52,7 @@
     - [Info Window Max Width](#info-window-max-width)
     - [Info Window Groups](#info-window-groups)
     - [Open Info Window on Load](#open-info-window-on-load)
+    - [Close Info Windows on Map Click](#close-info-windows-on-map-click)
 
 ## Third Party Libraries
 
@@ -1158,3 +1159,27 @@ Or via a data attribute:
     </li>
 </ul>
 ````
+
+### Close Info Windows on Map Click
+
+**Default:** `true`
+
+By default, when you click anywhere on the map, all info windows will be closed.
+You can disable this by setting this option to `false`.
+There can still only be one info window open per info window group.
+
+With javascript:
+
+```javascript
+$('.map').mapify({
+    closeInfoWindowsOnMapClick: false
+});
+```
+
+With a data attribute:
+
+```html
+<div class="map" data-close-info-windows-on-map-click="false"></div>
+```
+
+> I know... this data attribute is getting out of hand... :) But I can't shorten it AND keep it descriptive... Luckily the javascript version looks cleaner!

@@ -147,6 +147,7 @@
                 basicFormatEvents: true
             },
 
+            closeInfoWindowsOnMapClick: true,
             infoWindowMaxWidth: null,
 
             // The class to look for under a marker element
@@ -542,6 +543,7 @@
                 iconOrigin: this.$map.data('icon-origin'),
                 iconAnchor: this.$map.data('icon-anchor'),
 
+                closeInfoWindowsOnMapClick: this.$map.data('close-info-windows-on-map-click'),
                 infoWindowMaxWidth: this.$map.data('info-window-max-width'),
 
                 fitbounds: this.$map.data('fitbounds'),
@@ -728,7 +730,9 @@
         //
 
         onMapClick: function (event) {
-            this.closeAllInfoWindows();
+            if (this.options.closeInfoWindowsOnMapClick === true) {
+                this.closeAllInfoWindows();
+            }
             this.runUserCallback(this.options.onMapClick, this.map, this.map, event);
         },
 
