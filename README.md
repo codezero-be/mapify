@@ -50,6 +50,7 @@
     - [Single Info Window on the Map](#single-info-window-on-the-map)
 - [Info Window Options](#info-window-options)
     - [Info Window Max Width](#info-window-max-width)
+    - [Info Window Groups](#info-window-groups)
 
 ## Third Party Libraries
 
@@ -1087,6 +1088,39 @@ Or via a data attribute:
         data-lat="51.251245"
         data-lng="4.497890"
         data-info-window-max-width="300">
+        Marker A
+    </li>
+</ul>
+````
+
+### Info Window Groups
+
+**Default:** `'default'`
+
+Creating a separate info window for many markers will degrade performance.
+So by default we reuse a single info window instance.
+This means you can only have one window open at the same time.
+
+If you do need to open multiple info windows, you can assign each marker a unique info window group name.
+
+Via javascript:
+
+```javascript
+$('.map').mapify({
+    markers: [
+        { lat: 51.251245, lng: 4.497890, infoWindowGroup: 'some-group' }
+    ]
+});
+```
+
+Or via a data attribute:
+
+````html
+<ul id="map-markers">
+    <li class="marker"
+        data-lat="51.251245"
+        data-lng="4.497890"
+        data-info-window-group="some-group">
         Marker A
     </li>
 </ul>

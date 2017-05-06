@@ -185,7 +185,7 @@
         this.bounds = []; //=> Google Marker objects that should fit in the map
         this.clusterer = null; //=> Google MarkerClusterer object
         this.spiderfier = null; //=> OverlappingMarkerSpiderfier object
-        this.infoWindow = new google.maps.InfoWindow();
+        this.infoWindows = {}; //=> Google Maps InfoWindow objects
 
         this.init();
     }
@@ -258,6 +258,7 @@
                     label: markerOptions.label,
                     title: markerOptions.title,
                     infoWindow: markerOptions.infoWindow,
+                    infoWindowGroup: markerOptions.infoWindowGroup || 'default',
                     infoWindowMaxWidth: markerOptions.infoWindowMaxWidth,
                     map: this.map
                 })
@@ -266,6 +267,14 @@
             if (this.isUsingMarkerElements()) {
                 marker.$marker = markerOptions.$marker;
                 markerOptions.$marker.data('marker', marker);
+            }
+
+            // Get any info window content so we don't need to fetch it every time
+            marker.infoWindow = this.getInfoWindowContent(marker);
+
+            // Create an InfoWindow instance for the specified group if it does not already exist
+            if (marker.infoWindow !== null && this.infoWindows[marker.infoWindowGroup] === undefined) {
+                this.infoWindows[marker.infoWindowGroup] = new google.maps.InfoWindow();
             }
 
             // When fitbounds is true for a specific marker,
@@ -490,6 +499,7 @@
                 label: $marker.data('label'),
                 title: $marker.data('title'),
                 infoWindow: $marker.data('info-window'),
+                infoWindowGroup: $marker.data('info-window-group'),
                 infoWindowMaxWidth: $marker.data('info-window-max-width'),
                 $marker: $marker
             });
@@ -553,34 +563,46 @@
         },
 
         //
-        // InfoWindow
+        // Info Window
         //
 
-        closeInfoWindow: function () {
-            this.infoWindow.close();
-        },
-
         openInfoWindow: function (marker) {
-            var maxWidth,
-                content = this.getInfoWindowContent(marker);
+            var infoWindow, maxWidth;
 
-            this.closeInfoWindow();
+            this.closeInfoWindows(marker);
 
-            if (content === null) {
+            if ( ! marker.infoWindow) {
                 return;
             }
 
+            infoWindow = this.infoWindows[marker.infoWindowGroup];
             maxWidth = marker.infoWindowMaxWidth || this.options.infoWindowMaxWidth;
 
             if (maxWidth) {
-                this.infoWindow.setOptions({
+                infoWindow.setOptions({
                     maxWidth: maxWidth
                 });
             }
 
-            this.infoWindow.setContent(content);
-            this.infoWindow.open(this.map, marker);
+            infoWindow.setContent(marker.infoWindow);
+            infoWindow.open(this.map, marker);
         },
+
+        closeInfoWindows: function (marker) {
+            if (this.infoWindows[marker.infoWindowGroup]) {
+                this.infoWindows[marker.infoWindowGroup].close();
+            }
+        },
+
+        closeAllInfoWindows: function () {
+            $.each(this.infoWindows, function (index, infoWindow) {
+                infoWindow.close();
+            });
+        },
+
+        //
+        // Info Window Content
+        //
 
         getInfoWindowContent: function (marker) {
             var content = null;
@@ -687,7 +709,7 @@
         //
 
         onMapClick: function (event) {
-            this.closeInfoWindow();
+            this.closeAllInfoWindows();
             this.runUserCallback(this.options.onMapClick, this.map, this.map, event);
         },
 
