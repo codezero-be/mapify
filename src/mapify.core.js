@@ -147,6 +147,8 @@
                 basicFormatEvents: true
             },
 
+            infoWindowMaxWidth: null,
+
             // The class to look for under a marker element
             // when auto detecting an info window...
             // This takes the form of $marker.find('.info-window');
@@ -256,6 +258,7 @@
                     label: markerOptions.label,
                     title: markerOptions.title,
                     infoWindow: markerOptions.infoWindow,
+                    infoWindowMaxWidth: markerOptions.infoWindowMaxWidth,
                     map: this.map
                 })
             );
@@ -487,6 +490,7 @@
                 label: $marker.data('label'),
                 title: $marker.data('title'),
                 infoWindow: $marker.data('info-window'),
+                infoWindowMaxWidth: $marker.data('info-window-max-width'),
                 $marker: $marker
             });
         },
@@ -525,6 +529,8 @@
                 iconOrigin: this.$map.data('icon-origin'),
                 iconAnchor: this.$map.data('icon-anchor'),
 
+                infoWindowMaxWidth: this.$map.data('info-window-max-width'),
+
                 fitbounds: this.$map.data('fitbounds'),
                 fitboundsPadding: this.$map.data('fitbounds-padding'),
 
@@ -555,14 +561,25 @@
         },
 
         openInfoWindow: function (marker) {
-            var content = this.getInfoWindowContent(marker);
+            var maxWidth,
+                content = this.getInfoWindowContent(marker);
 
             this.closeInfoWindow();
 
-            if (content !== null) {
-                this.infoWindow.setContent(content);
-                this.infoWindow.open(this.map, marker);
+            if (content === null) {
+                return;
             }
+
+            maxWidth = marker.infoWindowMaxWidth || this.options.infoWindowMaxWidth;
+
+            if (maxWidth) {
+                this.infoWindow.setOptions({
+                    maxWidth: maxWidth
+                });
+            }
+
+            this.infoWindow.setContent(content);
+            this.infoWindow.open(this.map, marker);
         },
 
         getInfoWindowContent: function (marker) {

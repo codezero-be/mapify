@@ -48,6 +48,8 @@
     - [Info Window via Selector](#info-window-via-selector)
     - [Automatically Detect Info Window](#automatically-detect-info-window)
     - [Single Info Window on the Map](#single-info-window-on-the-map)
+- [Info Window Options](#info-window=options)
+    - [Info Window Max Width](#info-window-max-width)
 
 ## Third Party Libraries
 
@@ -1042,3 +1044,50 @@ With a data attribute:
 ```html
 <div class="map" data-lat="51.251245" data-lng="4.497890" data-info-window="#my-info-window"></div>
 ```
+
+## Info Window Options
+
+### Info Window Max Width
+
+**Default:** `null` (Google Maps default)
+
+You can set a default info window max width in pixels on the map.
+
+With javascript:
+
+```javascript
+$('.map').mapify({
+    infoWindowMaxWidth: 300
+});
+```
+
+With a data attribute:
+
+```html
+<div class="map" data-info-window-max-width="300"></div>
+```
+
+Furthermore, you can set a max width on a specific marker. This will override the default.
+
+Via javascript:
+
+```javascript
+$('.map').mapify({
+    markers: [
+        { lat: 51.251245, lng: 4.497890, infoWindowMaxWidth: 300 }
+    ]
+});
+```
+
+Or via a data attribute:
+
+````html
+<ul id="map-markers">
+    <li class="marker"
+        data-lat="51.251245"
+        data-lng="4.497890"
+        data-info-window-max-width="300">
+        Marker A
+    </li>
+</ul>
+````
