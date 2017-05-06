@@ -147,6 +147,11 @@
                 basicFormatEvents: true
             },
 
+            // The class to look for under a marker element
+            // when auto detecting an info window...
+            // This takes the form of $marker.find('.info-window');
+            infoWindowChildSelector: '.info-window',
+
             // The following callbacks are available...
             // The map and marker parameters are the Google Map and Marker objects.
             // You can access the related .map and .marker DOM elements as jQuery objects
@@ -580,7 +585,7 @@
 
         getInfoWindowContentFromChildElement: function ($marker) {
             if ($marker) {
-                return $marker.find('.info-window').html() || null;
+                return $marker.find(this.options.infoWindowChildSelector).html() || null;
             }
 
             return null;

@@ -1014,6 +1014,15 @@ We only check for this element when the previous options fail.
 </ul>
 ````
 
+You can change the default selector of the child info window element via javascript.
+We will try to `.find()` this selector under the marker element.
+
+```javascript
+$('.map').mapify({
+    infoWindowChildSelector: '.info-window'
+});
+```
+
 ### Single Info Window on the Map
 
 If you have set only one `lat` and `lng` on the map and you are not using multiple markers, you can also add the `infoWindow` option to it.
