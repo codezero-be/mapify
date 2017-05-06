@@ -200,6 +200,7 @@
             this.setMapOptions();
             this.fitBounds();
             this.enableClusters();
+            this.openDefaultInfoWindows();
             this.onInitialized();
         },
 
@@ -259,6 +260,7 @@
                     title: markerOptions.title,
                     infoWindow: markerOptions.infoWindow,
                     infoWindowGroup: markerOptions.infoWindowGroup || 'default',
+                    infoWindowOpen: markerOptions.infoWindowOpen,
                     infoWindowMaxWidth: markerOptions.infoWindowMaxWidth,
                     map: this.map
                 })
@@ -500,6 +502,7 @@
                 title: $marker.data('title'),
                 infoWindow: $marker.data('info-window'),
                 infoWindowGroup: $marker.data('info-window-group'),
+                infoWindowOpen: $marker.data('info-window-open'),
                 infoWindowMaxWidth: $marker.data('info-window-max-width'),
                 $marker: $marker
             });
@@ -598,6 +601,22 @@
             $.each(this.infoWindows, function (index, infoWindow) {
                 infoWindow.close();
             });
+        },
+
+        openDefaultInfoWindows: function () {
+            var openedInfoWindowGroups = [];
+            $.each(this.markers, function (index, marker) {
+                if (this.shouldOpenInfoWindowOnLoad(marker, openedInfoWindowGroups)) {
+                    openedInfoWindowGroups.push(marker.infoWindowGroup);
+                    this.openInfoWindow(marker);
+                }
+            }.bind(this));
+        },
+
+        shouldOpenInfoWindowOnLoad: function (marker, openedInfoWindowGroups) {
+            return openedInfoWindowGroups.indexOf(marker.infoWindowGroup) === -1
+                && marker.infoWindowOpen === true
+                && marker.infoWindow;
         },
 
         //

@@ -51,6 +51,7 @@
 - [Info Window Options](#info-window-options)
     - [Info Window Max Width](#info-window-max-width)
     - [Info Window Groups](#info-window-groups)
+    - [Open Info Window on Load](#open-info-window-on-load)
 
 ## Third Party Libraries
 
@@ -1121,6 +1122,38 @@ Or via a data attribute:
         data-lat="51.251245"
         data-lng="4.497890"
         data-info-window-group="some-group">
+        Marker A
+    </li>
+</ul>
+````
+
+### Open Info Window on Load
+
+**Default:** `false`
+
+If you want to open an info window automatically when the page loads, you can add the `infoWindowOpen` option to its marker.
+Note that only one info window can be open at the same time per info window group.
+
+If you set this option on more than one info window in the same group, only the first one will be opened. 
+
+If the marker is clustered and thus hidden, the info window will pop up when you uncluster the marker by clicking on the cluster icon.
+
+```javascript
+$('.map').mapify({
+    markers: [
+        { lat: 51.251245, lng: 4.497890, infoWindowOpen: true }
+    ]
+});
+```
+
+Or via a data attribute:
+
+````html
+<ul id="map-markers">
+    <li class="marker"
+        data-lat="51.251245"
+        data-lng="4.497890"
+        data-info-window-open="true">
         Marker A
     </li>
 </ul>
