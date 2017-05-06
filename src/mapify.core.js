@@ -564,13 +564,13 @@
             var content = null;
 
             if (this.isString(marker.infoWindow)) {
-                content = this.getInfoWindowSelectorContent(marker.infoWindow.trim());
+                content = this.getInfoWindowContentFromMarkerOption(marker.infoWindow.trim());
             }
 
-            return content || this.getInfoWindowChildElementContent(marker.$marker);
+            return content || this.getInfoWindowContentFromChildElement(marker.$marker);
         },
 
-        getInfoWindowSelectorContent: function (infoWindowContent) {
+        getInfoWindowContentFromMarkerOption: function (infoWindowContent) {
             if (infoWindowContent.substr(0, 1) === '.' || infoWindowContent.substr(0, 1) === '#') {
                 return $(infoWindowContent).html() || null;
             }
@@ -578,7 +578,7 @@
             return infoWindowContent.length > 0 ? infoWindowContent : null;
         },
 
-        getInfoWindowChildElementContent: function ($marker) {
+        getInfoWindowContentFromChildElement: function ($marker) {
             if ($marker) {
                 return $marker.find('.info-window').html() || null;
             }
