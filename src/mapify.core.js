@@ -106,7 +106,7 @@
             },
 
             spiderfy: true, //=> enable marker spiderfier?
-            spiderClick: false, //=> handle click event on a marker that triggers spiderfier
+            spiderClick: true, //=> handle click event on a marker that triggers spiderfier
 
             // Add official or custom map types...
             spiderLegColors: {

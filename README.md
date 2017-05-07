@@ -865,9 +865,9 @@ You can set a number of spiderfy options **on the map**, with javascript or HTML
 
 ### Trigger Marker Click Event when Spiderfying
 
-**Default:** `false`
+**Default:** `true`
 
-Trigger the click event on a marker even when it (un)spiderfies the markers in its vicinity.
+Trigger the click event on a marker even when it (un)spiderfies nearby markers.
 
 - `spiderClick: true` **(JavaScript)**
 - `data-spider-click="true"` **(HTML)**
