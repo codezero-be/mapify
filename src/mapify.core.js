@@ -149,6 +149,7 @@
 
             closeInfoWindowsOnMapClick: true,
             infoWindowTriggerMarker: 'click',
+            infoWindowTriggerElement: null,
             infoWindowMaxWidth: null,
 
             // The class to look for under a marker element
@@ -546,6 +547,7 @@
 
                 closeInfoWindowsOnMapClick: this.$map.data('close-info-windows-on-map-click'),
                 infoWindowTriggerMarker: this.$map.data('info-window-trigger-marker'),
+                infoWindowTriggerElement: this.$map.data('info-window-trigger-element'),
                 infoWindowMaxWidth: this.$map.data('info-window-max-width'),
 
                 fitbounds: this.$map.data('fitbounds'),
@@ -570,8 +572,53 @@
         },
 
         //
+        // Pan and Zoom
+        //
+
+        centerMarkerIfOutsideBounds: function (marker) {
+            if ( ! this.map.getBounds().contains(marker.position)) {
+                this.centerMarker(marker);
+            }
+        },
+
+        centerMarker: function (marker) {
+            this.map.panTo(marker.position);
+        },
+
+        goToMarker: function (marker) {
+            // The marker needs to be within the bounds,
+            // else the clusterer won't set marker.map...
+            this.centerMarkerIfOutsideBounds(marker);
+
+            // If the marker is clustered, zoom in...
+            while (marker.map === null && this.map.getZoom() < 20 && this.clusterer) {
+                this.map.setZoom(this.map.getZoom() + 1);
+
+                // Center again if needed, as zooming may have
+                // placed the marker outside of the bounds.
+                this.centerMarkerIfOutsideBounds(marker);
+
+                // Clusters are updated/repainted when
+                // Google Maps triggers the 'idle' event.
+                // So force a repaint...
+                this.clusterer.repaint();
+            }
+        },
+
+        //
         // Info Window
         //
+
+        goToInfoWindow: function (marker) {
+            this.closeInfoWindows(marker);
+            this.goToMarker(marker);
+
+            // Don't open the info window if the marker is still
+            // clustered and thus not shown on the map...
+            if (marker.map !== null) {
+                this.openInfoWindow(marker);
+            }
+        },
 
         openInfoWindow: function (marker) {
             var infoWindow, maxWidth;
@@ -761,16 +808,32 @@
 
         onMarkerElementClick: function (event) {
             var marker = $(event.currentTarget).data('marker');
+
+            if (this.options.infoWindowTriggerElement === 'click') {
+                event.preventDefault();
+                this.goToInfoWindow(marker);
+            }
+
             this.runUserCallback(this.options.onMarkerElementClick, marker, marker, this.map, event);
         },
 
         onMarkerElementMouseEnter: function (event) {
             var marker = $(event.currentTarget).data('marker');
+
+            if (this.options.infoWindowTriggerElement === 'hover') {
+                this.goToInfoWindow(marker);
+            }
+
             this.runUserCallback(this.options.onMarkerElementMouseEnter, marker, marker, this.map, event);
         },
 
         onMarkerElementMouseLeave: function (event) {
             var marker = $(event.currentTarget).data('marker');
+
+            if (this.options.infoWindowTriggerElement === 'hover') {
+                this.closeInfoWindows(marker);
+            }
+
             this.runUserCallback(this.options.onMarkerElementMouseLeave, marker, marker, this.map, event);
         },
 

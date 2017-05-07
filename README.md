@@ -53,6 +53,7 @@
     - [Info Window Groups](#info-window-groups)
     - [Open Info Window on Load](#open-info-window-on-load)
     - [Open Info Window on Click or Hover (Marker Object)](#open-info-window-on-click-or-hover-marker-object)
+    - [Open Info Window on Click or Hover (Marker Element)](#open-info-window-on-click-or-hover-marker-element)
     - [Close Info Windows on Map Click](#close-info-windows-on-map-click)
 
 ## Third Party Libraries
@@ -1185,6 +1186,35 @@ With a data attribute:
 
 ```html
 <div class="map" data-info-window-trigger-marker="hover"></div>
+```
+
+### Open Info Window on Click or Hover (Marker Element)
+
+**Default:** `null`
+
+If you created marker HTML elements, you can choose to show an info window on the map when you click on the HTML element or hover over it.
+If the targeted marker is outside of the map's boundaries, it will be centered on the map.
+If it is clustered and thus not actually shown on the map, the map will zoom in until it is unclustered.
+
+By default, this behavior is disabled.
+
+Possible values:
+
+- `'click'`
+- `'hover'`
+
+With javascript:
+
+```javascript
+$('.map').mapify({
+    infoWindowTriggerElement: 'hover'
+});
+```
+
+With a data attribute:
+
+```html
+<div class="map" data-info-window-trigger-element="hover"></div>
 ```
 
 ### Close Info Windows on Map Click
