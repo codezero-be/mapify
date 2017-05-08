@@ -172,17 +172,17 @@
             // You can access the related .map and .marker DOM elements as jQuery objects
             // via the property map.$map and marker.$marker
             onInitialized:             function (map, markers, clusterer, spiderfier) { },
-            onMapClick:                function (map, event) { },
-            onMarkerClick:             function (marker, map, event) { },
-            onMarkerMouseEnter:        function (marker, map, event) { },
-            onMarkerMouseLeave:        function (marker, map, event) { },
-            onMarkerElementClick:      function (marker, map, event) { },
-            onMarkerElementMouseEnter: function (marker, map, event) { },
-            onMarkerElementMouseLeave: function (marker, map, event) { },
-            onClusterClick:            function (markers, cluster, map) { },
-            onClusterMouseEnter:       function (markers, cluster, map) { },
-            onClusterMouseLeave:       function (markers, cluster, map) { },
-            onSpiderMarkerFormat:      function (marker, markerStatus, map) { }
+            onMapClick:                function (map, markers, clusterer, spiderfier, event) { },
+            onMarkerClick:             function (marker, map, markers, clusterer, spiderfier, event) { },
+            onMarkerMouseEnter:        function (marker, map, markers, clusterer, spiderfier, event) { },
+            onMarkerMouseLeave:        function (marker, map, markers, clusterer, spiderfier, event) { },
+            onMarkerElementClick:      function (marker, map, markers, clusterer, spiderfier, event) { },
+            onMarkerElementMouseEnter: function (marker, map, markers, clusterer, spiderfier, event) { },
+            onMarkerElementMouseLeave: function (marker, map, markers, clusterer, spiderfier, event) { },
+            onClusterClick:            function (clusterMarkers, cluster, map, markers, clusterer, spiderfier) { },
+            onClusterMouseEnter:       function (clusterMarkers, cluster, map, markers, clusterer, spiderfier) { },
+            onClusterMouseLeave:       function (clusterMarkers, cluster, map, markers, clusterer, spiderfier) { },
+            onSpiderMarkerFormat:      function (marker, markerStatus, map, markers, clusterer, spiderfier) { }
         };
 
     function Plugin (mapContainer, options) {
@@ -811,7 +811,7 @@
             if (this.options.closeInfoWindowsOnMapClick === true) {
                 this.closeAllInfoWindows();
             }
-            this.runUserCallback(this.options.onMapClick, this.map, this.map, event);
+            this.runUserCallback(this.options.onMapClick, this.map, this.map, this.markers, this.clusterer, this.spiderfier, event);
         },
 
         //
@@ -823,7 +823,7 @@
                 this.openInfoWindow(marker);
             }
 
-            this.runUserCallback(this.options.onMarkerClick, marker, marker, this.map, event);
+            this.runUserCallback(this.options.onMarkerClick, marker, marker, this.map, this.markers, this.clusterer, this.spiderfier, event);
         },
 
         onMarkerMouseEnter: function (marker, event) {
@@ -831,7 +831,7 @@
                 this.openInfoWindow(marker);
             }
 
-            this.runUserCallback(this.options.onMarkerMouseEnter, marker, marker, this.map, event);
+            this.runUserCallback(this.options.onMarkerMouseEnter, marker, marker, this.map, this.markers, this.clusterer, this.spiderfier, event);
         },
 
         onMarkerMouseLeave: function (marker, event) {
@@ -839,7 +839,7 @@
                 this.closeInfoWindows(marker);
             }
 
-            this.runUserCallback(this.options.onMarkerMouseLeave, marker, marker, this.map, event);
+            this.runUserCallback(this.options.onMarkerMouseLeave, marker, marker, this.map, this.markers, this.clusterer, this.spiderfier, event);
         },
 
         //
@@ -849,13 +849,13 @@
         onMarkerElementClick: function (event) {
             var marker = $(event.currentTarget).data('marker');
             this.handleMarkerElementEvent('click', marker, event);
-            this.runUserCallback(this.options.onMarkerElementClick, marker, marker, this.map, event);
+            this.runUserCallback(this.options.onMarkerElementClick, marker, marker, this.map, this.markers, this.clusterer, this.spiderfier, event);
         },
 
         onMarkerElementMouseEnter: function (event) {
             var marker = $(event.currentTarget).data('marker');
             this.handleMarkerElementEvent('hover', marker, event);
-            this.runUserCallback(this.options.onMarkerElementMouseEnter, marker, marker, this.map, event);
+            this.runUserCallback(this.options.onMarkerElementMouseEnter, marker, marker, this.map, this.markers, this.clusterer, this.spiderfier, event);
         },
 
         onMarkerElementMouseLeave: function (event) {
@@ -865,7 +865,7 @@
                 this.closeInfoWindows(marker);
             }
 
-            this.runUserCallback(this.options.onMarkerElementMouseLeave, marker, marker, this.map, event);
+            this.runUserCallback(this.options.onMarkerElementMouseLeave, marker, marker, this.map, this.markers, this.clusterer, this.spiderfier, event);
         },
 
         handleMarkerElementEvent: function (eventName, marker, event) {
@@ -890,15 +890,15 @@
         //
 
         onClusterClick: function (cluster) {
-            this.runUserCallback(this.options.onClusterClick, cluster, cluster.getMarkers(), cluster, this.map);
+            this.runUserCallback(this.options.onClusterClick, cluster, cluster.getMarkers(), cluster, this.map, this.markers, this.clusterer, this.spiderfier);
         },
 
         onClusterMouseEnter: function (cluster) {
-            this.runUserCallback(this.options.onClusterMouseEnter, cluster, cluster.getMarkers(), cluster, this.map);
+            this.runUserCallback(this.options.onClusterMouseEnter, cluster, cluster.getMarkers(), cluster, this.map, this.markers, this.clusterer, this.spiderfier);
         },
 
         onClusterMouseLeave: function (cluster) {
-            this.runUserCallback(this.options.onClusterMouseLeave, cluster, cluster.getMarkers(), cluster, this.map);
+            this.runUserCallback(this.options.onClusterMouseLeave, cluster, cluster.getMarkers(), cluster, this.map, this.markers, this.clusterer, this.spiderfier);
         },
 
         //
@@ -906,7 +906,7 @@
         //
 
         onSpiderMarkerFormat: function (marker, markerStatus) {
-            this.runUserCallback(this.options.onSpiderMarkerFormat, marker, marker, markerStatus, this.map);
+            this.runUserCallback(this.options.onSpiderMarkerFormat, marker, marker, markerStatus, this.map, this.markers, this.clusterer, this.spiderfier);
         },
 
         //
