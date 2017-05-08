@@ -43,6 +43,7 @@
     - [Trigger Marker Click Event when Spiderfying](#trigger-marker-click-event-when-spiderfying)
     - [Spider Leg Colors](#spider-leg-colors)
     - [Advanced Spiderfier Options](#advanced-spiderfier-options)
+- [Auto Pan to Marker with its HTML Element](#auto-pan-to-marker-with-its-html-element)
 - [Info Window](#info-window)
     - [Inline Info Window](#inline-info-window)
     - [Info Window via Selector](#info-window-via-selector)
@@ -931,6 +932,46 @@ $('.map').mapify({
 });
 ```
 
+## Auto Pan to Marker with its HTML Element
+
+**Default:** `false`
+
+If you create marker HTML elements, you can automatically pan and zoom to the related marker on the map when you click on or hover over the element.
+When enabled, the marker will be centered on the map and if the marker is clustered, the map will zoom in until it is unclustered.
+
+This behavior is disabled by default, but you can configure this on the map, using these possible values..
+
+Pan to marker only if it is clustered or outside the map's boundaries:
+
+- `click`
+- `hover`
+
+Pan to marker even if it's within the map's boundaries:
+
+- `'hover-always'`
+- `'click-always'`
+
+Disable panning (default):
+
+-  `false`
+
+With javascript:
+
+```javascript
+$('.map').mapify({
+    panToMarker: 'click'
+});
+```
+
+With a data attribute:
+
+```html
+<div class="map" data-pan-to-marker="click"></div>
+```
+
+> This option can be used in combination with opening an info window.
+> See: [Open Info Window on Click or Hover (Marker Element)](#open-info-window-on-click-or-hover-marker-element).
+
 ## Info Window
 
 **Default:** none
@@ -1178,43 +1219,57 @@ With javascript:
 
 ```javascript
 $('.map').mapify({
-    infoWindowTriggerMarker: 'hover'
+    triggerInfoWindowOnMarker: 'hover'
 });
 ```
 
 With a data attribute:
 
 ```html
-<div class="map" data-info-window-trigger-marker="hover"></div>
+<div class="map" data-trigger-info-window-on-marker="hover"></div>
 ```
 
 ### Open Info Window on Click or Hover (Marker Element)
 
-**Default:** `null`
+**Default:** `false`
 
-If you created marker HTML elements, you can choose to show an info window on the map when you click on the HTML element or hover over it.
+If you create marker HTML elements, you can choose to show an info window on the map when you click on the HTML element or hover over it.
 If the targeted marker is outside of the map's boundaries, it will be centered on the map.
 If it is clustered and thus not actually shown on the map, the map will zoom in until it is unclustered.
 
-By default, this behavior is disabled.
+> This option ignores the `panToMarker` setting, but you can combine the two.
+> For example: you can set `panToMarker` to `hover` and this option to `click`.
+> But showing the info window on `hover` and setting `panToMarker` to `click` makes no sense at all.
+> In that case you don't need to set the `panToMarker` option at all.
 
-Possible values:
+This option is disabled by default, but you can enable it with these possible values:
 
-- `'click'`
-- `'hover'`
+Pan to marker only if it is clustered or outside the map's boundaries and show the info window:
+
+- `click`
+- `hover`
+
+Pan to marker even if it's within the map's boundaries and show the info window:
+
+- `'hover-always'`
+- `'click-always'`
+
+Don't show the info window (default):
+
+-  `false`
 
 With javascript:
 
 ```javascript
 $('.map').mapify({
-    infoWindowTriggerElement: 'hover'
+    triggerInfoWindowOnElement: 'hover'
 });
 ```
 
 With a data attribute:
 
 ```html
-<div class="map" data-info-window-trigger-element="hover"></div>
+<div class="map" data-trigger-info-window-on-element="hover"></div>
 ```
 
 ### Close Info Windows on Map Click

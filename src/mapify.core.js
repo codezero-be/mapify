@@ -147,9 +147,19 @@
                 basicFormatEvents: true
             },
 
+            // Center marker on $marker hover/click if clustered or not in bounds...
+            // Choose: 'hover', 'click', 'hover-always', 'click-always', false
+            panToMarker: false,
+
+            // Show info window and center marker on $marker hover/click if clustered or not in bounds...
+            // Choose: 'hover', 'click', 'hover-always', 'click-always', false
+            triggerInfoWindowOnElement: false,
+
+            // Show info window on marker object hover/click...
+            // Choose: 'hover', 'click', false
+            triggerInfoWindowOnMarker: 'click',
+
             closeInfoWindowsOnMapClick: true,
-            infoWindowTriggerMarker: 'click',
-            infoWindowTriggerElement: null,
             infoWindowMaxWidth: null,
 
             // The class to look for under a marker element
@@ -545,9 +555,11 @@
                 iconOrigin: this.$map.data('icon-origin'),
                 iconAnchor: this.$map.data('icon-anchor'),
 
+                panToMarker: this.$map.data('pan-to-marker'),
+
                 closeInfoWindowsOnMapClick: this.$map.data('close-info-windows-on-map-click'),
-                infoWindowTriggerMarker: this.$map.data('info-window-trigger-marker'),
-                infoWindowTriggerElement: this.$map.data('info-window-trigger-element'),
+                triggerInfoWindowOnMarker: this.$map.data('trigger-info-window-on-marker'),
+                triggerInfoWindowOnElement: this.$map.data('trigger-info-window-on-element'),
                 infoWindowMaxWidth: this.$map.data('info-window-max-width'),
 
                 fitbounds: this.$map.data('fitbounds'),
@@ -575,10 +587,8 @@
         // Pan and Zoom
         //
 
-        centerMarkerIfOutsideBounds: function (marker) {
-            if ( ! this.map.getBounds().contains(marker.position)) {
-                this.centerMarker(marker);
-            }
+        isMarkerWithinBounds: function (marker) {
+            return this.map.getBounds().contains(marker.position);
         },
 
         centerMarker: function (marker) {
@@ -588,7 +598,7 @@
         goToMarker: function (marker) {
             // The marker needs to be within the bounds,
             // else the clusterer won't set marker.map...
-            this.centerMarkerIfOutsideBounds(marker);
+            this.centerMarker(marker);
 
             // If the marker is clustered, zoom in...
             while (marker.map === null && this.map.getZoom() < 20 && this.clusterer) {
@@ -596,7 +606,9 @@
 
                 // Center again if needed, as zooming may have
                 // placed the marker outside of the bounds.
-                this.centerMarkerIfOutsideBounds(marker);
+                if ( ! this.isMarkerWithinBounds(marker)) {
+                    this.centerMarker(marker);
+                }
 
                 // Clusters are updated/repainted when
                 // Google Maps triggers the 'idle' event.
@@ -608,17 +620,6 @@
         //
         // Info Window
         //
-
-        goToInfoWindow: function (marker) {
-            this.closeInfoWindows(marker);
-            this.goToMarker(marker);
-
-            // Don't open the info window if the marker is still
-            // clustered and thus not shown on the map...
-            if (marker.map !== null) {
-                this.openInfoWindow(marker);
-            }
-        },
 
         openInfoWindow: function (marker) {
             var infoWindow, maxWidth;
@@ -775,8 +776,36 @@
         },
 
         //
-        // Events & Callbacks
+        // Event Conditionals
         //
+
+        shouldPanToMarker: function (eventName, marker) {
+            return this.shouldAlwaysPanToMarker(eventName)
+                || this.shouldPanToMarkerBecauseClusteredOrOutOfBounds(eventName, marker);
+        },
+
+        shouldAlwaysPanToMarker: function (eventName) {
+            return this.options.panToMarker === eventName + '-always'
+                || this.options.triggerInfoWindowOnElement === eventName + '-always';
+        },
+
+        shouldPanToMarkerBecauseClusteredOrOutOfBounds: function (eventName, marker) {
+            return (this.options.panToMarker === eventName || this.options.triggerInfoWindowOnElement === eventName)
+                && (marker.map === null || ! this.isMarkerWithinBounds(marker));
+        },
+
+        shouldOpenInfoWindowOnElementEvent: function (eventName) {
+            return this.options.triggerInfoWindowOnElement === eventName
+                || this.options.triggerInfoWindowOnElement === eventName + '-always';
+        },
+
+        //
+        // Map Events
+        //
+
+        onInitialized: function () {
+            this.runUserCallback(this.options.onSpiderMarkerFormat, this.map, this.map, this.markers, this.clusterer, this.spiderfier);
+        },
 
         onMapClick: function (event) {
             if (this.options.closeInfoWindowsOnMapClick === true) {
@@ -785,57 +814,80 @@
             this.runUserCallback(this.options.onMapClick, this.map, this.map, event);
         },
 
+        //
+        // Marker Object Events
+        //
+
         onMarkerClick: function (marker, event) {
-            if (this.options.infoWindowTriggerMarker === 'click') {
+            if (this.options.triggerInfoWindowOnMarker === 'click') {
                 this.openInfoWindow(marker);
             }
+
             this.runUserCallback(this.options.onMarkerClick, marker, marker, this.map, event);
         },
 
         onMarkerMouseEnter: function (marker, event) {
-            if (this.options.infoWindowTriggerMarker === 'hover') {
+            if (this.options.triggerInfoWindowOnMarker === 'hover') {
                 this.openInfoWindow(marker);
             }
+
             this.runUserCallback(this.options.onMarkerMouseEnter, marker, marker, this.map, event);
         },
 
         onMarkerMouseLeave: function (marker, event) {
-            if (this.options.infoWindowTriggerMarker === 'hover') {
+            if (this.options.triggerInfoWindowOnMarker === 'hover') {
                 this.closeInfoWindows(marker);
             }
+
             this.runUserCallback(this.options.onMarkerMouseLeave, marker, marker, this.map, event);
         },
 
+        //
+        // Marker Element Events
+        //
+
         onMarkerElementClick: function (event) {
             var marker = $(event.currentTarget).data('marker');
-
-            if (this.options.infoWindowTriggerElement === 'click') {
-                event.preventDefault();
-                this.goToInfoWindow(marker);
-            }
-
+            this.handleMarkerElementEvent('click', marker, event);
             this.runUserCallback(this.options.onMarkerElementClick, marker, marker, this.map, event);
         },
 
         onMarkerElementMouseEnter: function (event) {
             var marker = $(event.currentTarget).data('marker');
-
-            if (this.options.infoWindowTriggerElement === 'hover') {
-                this.goToInfoWindow(marker);
-            }
-
+            this.handleMarkerElementEvent('hover', marker, event);
             this.runUserCallback(this.options.onMarkerElementMouseEnter, marker, marker, this.map, event);
         },
 
         onMarkerElementMouseLeave: function (event) {
             var marker = $(event.currentTarget).data('marker');
 
-            if (this.options.infoWindowTriggerElement === 'hover') {
+            if (this.shouldOpenInfoWindowOnElementEvent('hover')) {
                 this.closeInfoWindows(marker);
             }
 
             this.runUserCallback(this.options.onMarkerElementMouseLeave, marker, marker, this.map, event);
         },
+
+        handleMarkerElementEvent: function (eventName, marker, event) {
+            if (this.shouldPanToMarker(eventName, marker)) {
+                event.preventDefault();
+                this.goToMarker(marker);
+            }
+
+            if (this.shouldOpenInfoWindowOnElementEvent(eventName)) {
+                event.preventDefault();
+                this.closeInfoWindows(marker);
+                // Don't open the info window if the marker is still
+                // clustered and thus not shown on the map...
+                if (marker.map !== null) {
+                    this.openInfoWindow(marker);
+                }
+            }
+        },
+
+        //
+        // Cluster Events
+        //
 
         onClusterClick: function (cluster) {
             this.runUserCallback(this.options.onClusterClick, cluster, cluster.getMarkers(), cluster, this.map);
@@ -849,20 +901,23 @@
             this.runUserCallback(this.options.onClusterMouseLeave, cluster, cluster.getMarkers(), cluster, this.map);
         },
 
+        //
+        // Spider Events
+        //
+
         onSpiderMarkerFormat: function (marker, markerStatus) {
             this.runUserCallback(this.options.onSpiderMarkerFormat, marker, marker, markerStatus, this.map);
         },
 
-        onInitialized: function () {
-            this.runUserCallback(this.options.onSpiderMarkerFormat, this.map, this.map, this.markers, this.clusterer, this.spiderfier);
-        },
+        //
+        // Callback Handler
+        //
 
         runUserCallback: function (callback, target) {
             if (callback instanceof Function) {
                 callback.apply(target, Array.prototype.slice.call(arguments, 2));
             }
         }
-
     });
 
     $.fn[ pluginName ] = function (options) {
