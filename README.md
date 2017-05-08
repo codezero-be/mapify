@@ -144,11 +144,15 @@ What configuration strategy you choose is personal preference. However, in more 
 
 If you only need to show one marker on a map, it couldn't be simpler:
 
-```javascript
-$('.map').mapify({
-    lat: 51.251245,
-    lng: 4.497890
-});
+```html
+<div class="map"></div>
+
+<script>
+    $('.map').mapify({
+        lat: 51.251245,
+        lng: 4.497890
+    });
+</script>
 ```
 
 This will add a default marker on the `lat` and `lng` coordinates and center the map there.
@@ -157,6 +161,10 @@ This is the equivalent of doing:
 
 ```html
 <div class="map" data-lat="51.251245" data-lng="4.497890"></div>
+
+<script>
+    $('.map').mapify();
+</script>
 ```
 
 >   The values of the data attributes will always take precedence over the javascript options!
@@ -167,27 +175,39 @@ Creating a map with multiple markers is basically the same as the previous examp
 
 You can add marker objects with a javascript array:
 
-```javascript
-$('.map').mapify({
-    markers: [
-        { lat: 51.251245, lng: 4.497890 },
-        { lat: 50.963258, lng: 3.706874 }
-    ]
-});
+```html
+<div class="map"></div>
+
+<script>
+    $('.map').mapify({
+        markers: [
+            { lat: 51.251245, lng: 4.497890 },
+            { lat: 50.963258, lng: 3.706874 }
+        ]
+    });
+</script>
 ```
 
 Or you can refer to HTML elements using any selector you want:
 
-```javascript
-$('.map').mapify({
-    markers: '#map-markers .marker'
-});
+```html
+<div class="map"></div>
+
+<script>
+    $('.map').mapify({
+        markers: '#map-markers .marker'
+    });
+</script>
 ```
 
 You can also set the marker selector with a `data-markers` attribute:
 
 ```html
 <div class="map" data-markers="#map-markers .marker"></div>
+
+<script>
+    $('.map').mapify();
+</script>
 ```
 
 >   If you set a `data-markers` attribute, but also an array in javascript, the array will be ignored.
@@ -452,7 +472,7 @@ To use a custom image as a marker, set one or more of the following options:
 
 ```javascript
 $('.map').mapify({
-    icon: 'path/to/marker.png',
+    icon: '/path/to/marker.png',
     iconSize: '40,40',
     iconOrigin: '0,0',
     iconAnchor: '0,40'
@@ -463,7 +483,7 @@ Or use the data attributes:
 
 ```html
 <div class="map"
-     data-icon="path/to/marker.png"
+     data-icon="/path/to/marker.png"
      data-icon-size="40,40"
      data-icon-origin="0,0"
      data-icon-anchor="0,40">
@@ -480,9 +500,9 @@ On a marker object:
 $('.map').mapify({
     markers: [
         {
-        	lat: 51.251245,
+            lat: 51.251245,
             lng: 4.497890,
-            icon: 'path/to/marker.png',
+            icon: '/path/to/marker.png',
             iconSize: '40,40',
             iconOrigin: '0,0',
             iconAnchor: '0,40'
@@ -498,7 +518,7 @@ On a marker element:
     <li class="marker"
         data-lat="51.251245"
         data-lng="4.497890"
-        data-icon="path/to/marker.png"
+        data-icon="/path/to/marker.png"
         data-icon-size="40,40"
         data-icon-origin="0,0"
         data-icon-anchor="0,40">
@@ -519,7 +539,7 @@ You can set it on the marker object:
 $('.map').mapify({
     markers: [
         {
-        	lat: 51.251245,
+            lat: 51.251245,
             lng: 4.497890,
             label: 'A',
             title: 'Some more information...'
@@ -727,8 +747,8 @@ If this is `true`, sprites cannot be used as cluster icons (advanced).
 
 You can change the default cluster icon by setting a few basic options.
 
-- `clusterIcon: 'path/to/icon.png'` **(JavaScript)**
-- `data-cluster-icon="path/to/icon.png"` **(HTML)**
+- `clusterIcon: '/path/to/icon.png'` **(JavaScript)**
+- `data-cluster-icon="/path/to/icon.png"` **(HTML)**
 
 ### Cluster Icon Size
 
@@ -768,7 +788,7 @@ $('.map').mapify({
             // Required:
             width: 50, //=> actual image width !!!
             height: 50, //=> actual image height !!!
-            url: 'path/to/icon.png',
+            url: '/path/to/icon.png',
             // Optional:
             backgroundPosition: '0, 0', //=> 'X, Y' (mind the space!)
             anchorIcon: [25, 25], //=> [Y,X] (defauls to center of the icon)
