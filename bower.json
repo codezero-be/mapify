@@ -1,0 +1,18 @@
+{
+  "name": "codezero-mapify",
+  "description": "Mapify - Google Maps jQuery Plugin",
+  "main": "dist/mapify.min.js",
+  "authors": [
+    "Ivan Vermeyen"
+  ],
+  "license": "MIT",
+  "keywords": ["google", "map", "jquery", "cluster", "spiderfier"],
+  "homepage": "https://github.com/codezero-be/mapify",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
