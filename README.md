@@ -47,6 +47,8 @@
     - [Spider Leg Colors](#spider-leg-colors)
     - [Advanced Spiderfier Options](#advanced-spiderfier-options)
 - [Auto Pan to Marker with its HTML Element](#auto-pan-to-marker-with-its-html-element)
+- [Add Class to Marker Element on Hover](#add-class-to-marker-element-on-hover)
+- [Add Class to Marker Element when Info Window Open](#add-class-to-marker-element-when-info-window-open)
 - [Info Window](#info-window)
     - [Inline Info Window](#inline-info-window)
     - [Info Window via Selector](#info-window-via-selector)
@@ -1045,6 +1047,50 @@ With a data attribute:
 
 > This option can be used in combination with opening an info window.
 > See: [Open Info Window on Click or Hover (Marker Element)](#open-info-window-on-click-or-hover-marker-element).
+
+## Add Class to Marker Element on Hover
+
+**Default:** `null`
+
+When you create marker HTML elements, a class can be added whenever you hover over such an element or its related marker on the map.
+
+You set this option on the map. This is disabled by default.
+
+With javascript:
+
+```javascript
+$('.map').mapify({
+    hoverClass: 'marker-hover'
+});
+```
+
+With a data attribute:
+
+```html
+<div class="map" data-hover-class="marker-hover"></div>
+```
+
+## Add Class to Marker Element when Info Window Open
+
+**Default:** `null`
+
+If you create marker HTML elements with info windows, a class can be added to the marker element when its info window is opened on the map.
+
+You set this option on the map. This is disabled by default.
+
+With javascript:
+
+```javascript
+$('.map').mapify({
+    openClass: 'marker-open'
+});
+```
+
+With a data attribute:
+
+```html
+<div class="map" data-open-class="marker-open"></div>
+```
 
 ## Info Window
 

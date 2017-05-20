@@ -72,6 +72,9 @@
             iconOpenOrigin: null, //=> optional
             iconOpenAnchor: null, //=> optional
 
+            hoverClass: null, //=> class name that is added to a marker element on marker hover
+            openClass: null, //=> class name that is added to a marker element when its info window is open
+
             clusters: true, //=> enable marker clustering?
             clusterTitle: '', //=> browser tooltip when hovering over a cluster icon
             clusterCenter: true, //=> position the cluster icon in the center of the markers or on the first marker
@@ -595,6 +598,9 @@
                 iconOpenOrigin: this.$map.data('icon-open-origin'),
                 iconOpenAnchor: this.$map.data('icon-open-anchor'),
 
+                hoverClass: this.$map.data('hover-class'),
+                openClass: this.$map.data('open-class'),
+
                 panToMarker: this.$map.data('pan-to-marker'),
 
                 closeInfoWindowsOnMapClick: this.$map.data('close-info-windows-on-map-click'),
@@ -684,6 +690,9 @@
             }
 
             marker.isInfoWindowOpen = true;
+
+            this.addMarkerElementOpenClass(marker);
+
             infoWindow.marker = marker;
             infoWindow.setContent(marker.infoWindow);
             infoWindow.open(this.map, marker);
@@ -707,6 +716,7 @@
             if (infoWindow.marker) {
                 infoWindow.marker.isInfoWindowOpen = false;
                 infoWindow.marker.setIcon(infoWindow.marker.icons.default);
+                this.removeMarkerElementOpenClass(infoWindow.marker);
             }
 
             infoWindow.marker = null;
@@ -834,6 +844,34 @@
         },
 
         //
+        // Marker Element Classes
+        //
+
+        addMarkerElementHoverClass: function (marker) {
+            if (this.options.hoverClass && marker.$marker) {
+                marker.$marker.addClass(this.options.hoverClass);
+            }
+        },
+
+        removeMarkerElementHoverClass: function (marker) {
+            if (this.options.hoverClass && marker.$marker) {
+                marker.$marker.removeClass(this.options.hoverClass);
+            }
+        },
+
+        addMarkerElementOpenClass: function (marker) {
+            if (this.options.openClass && marker.$marker) {
+                marker.$marker.addClass(this.options.openClass);
+            }
+        },
+
+        removeMarkerElementOpenClass: function (marker) {
+            if (this.options.openClass && marker.$marker) {
+                marker.$marker.removeClass(this.options.openClass);
+            }
+        },
+
+        //
         // Event Conditionals
         //
 
@@ -893,6 +931,8 @@
                 marker.setIcon(marker.icons.hover);
             }
 
+            this.addMarkerElementHoverClass(marker);
+
             this.runUserCallback(this.options.onMarkerMouseEnter, marker, marker, this.map, this.markers, this.clusterer, this.spiderfier, event);
         },
 
@@ -907,6 +947,8 @@
                 icon = marker.isInfoWindowOpen ? 'open': 'default';
                 marker.setIcon(marker.icons[icon]);
             }
+
+            this.removeMarkerElementHoverClass(marker);
 
             this.runUserCallback(this.options.onMarkerMouseLeave, marker, marker, this.map, this.markers, this.clusterer, this.spiderfier, event);
         },
@@ -928,6 +970,8 @@
                 marker.setIcon(marker.icons.hover);
             }
 
+            this.addMarkerElementHoverClass(marker);
+
             this.handleMarkerElementEvent('hover', marker, event);
             this.runUserCallback(this.options.onMarkerElementMouseEnter, marker, marker, this.map, this.markers, this.clusterer, this.spiderfier, event);
         },
@@ -940,6 +984,8 @@
                 icon = marker.isInfoWindowOpen ? 'open' : 'default';
                 marker.setIcon(marker.icons[icon]);
             }
+
+            this.removeMarkerElementHoverClass(marker);
 
             if (this.shouldOpenInfoWindowOnElementEvent('hover')) {
                 this.closeInfoWindows(marker);
