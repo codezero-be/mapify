@@ -31,6 +31,27 @@
             // The mapTypeControl is enabled automatically if you set more than one mapType.
             controls: ['zoom'],
 
+            // Control positioning...
+            // https://developers.google.com/maps/documentation/javascript/reference#ControlPosition
+            // Possible values:
+            // - 'BOTTOM_CENTER'
+            // - 'BOTTOM_LEFT'
+            // - 'BOTTOM_RIGHT'
+            // - 'LEFT_BOTTOM'
+            // - 'LEFT_CENTER'
+            // - 'LEFT_TOP'
+            // - 'RIGHT_BOTTOM'
+            // - 'RIGHT_CENTER'
+            // - 'RIGHT_TOP'
+            // - 'TOP_CENTER'
+            // - 'TOP_LEFT'
+            // - 'TOP_RIGHT'
+            mapTypeControlPosition: 'TOP_LEFT',
+            zoomControlPosition: 'RIGHT_BOTTOM',
+            fullscreenControlPosition: 'TOP_RIGHT',
+            streetviewControlPosition: 'RIGHT_BOTTOM',
+            rotateControlPosition: 'RIGHT_BOTTOM',
+
             // Custom map styles...
             // Find premade themes on https://snazzymaps.com/
             styles: null,
@@ -357,7 +378,20 @@
                     scaleControl: this.isControlEnabled('scale'),
                     // Control options...
                     mapTypeControlOptions: {
-                        mapTypeIds: this.options.mapTypes
+                        mapTypeIds: this.options.mapTypes,
+                        position: google.maps.ControlPosition[this.options.mapTypeControlPosition]
+                    },
+                    zoomControlOptions: {
+                        position: google.maps.ControlPosition[this.options.zoomControlPosition]
+                    },
+                    fullscreenControlOptions: {
+                        position: google.maps.ControlPosition[this.options.fullscreenControlPosition]
+                    },
+                    streetViewControlOptions: {
+                        position: google.maps.ControlPosition[this.options.streetviewControlPosition]
+                    },
+                    rotateControlOptions: {
+                        position: google.maps.ControlPosition[this.options.rotateControlPosition]
                     }
                 })
             );
@@ -579,6 +613,12 @@
                 zoom: this.$map.data('zoom'),
                 scrollwheel: this.$map.data('scrollwheel'),
                 controls: this.$map.data('controls'),
+
+                mapTypeControlPosition: this.$map.data('map-type-control-position'),
+                zoomControlPosition: this.$map.data('zoom-control-position'),
+                fullscreenControlPosition: this.$map.data('fullscreen-control-position'),
+                streetviewControlPosition: this.$map.data('streetview-control-position'),
+                rotateControlPosition: this.$map.data('rotate-control-position'),
 
                 icon: this.$map.data('icon'),
                 iconSize: this.$map.data('icon-size'),

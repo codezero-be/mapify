@@ -16,6 +16,7 @@
     - [Map Background Color](#map-background-color)
     - [Map Types](#map-types)
     - [Map Controls](#map-controls)
+    - [Map Control Positioning](#map-control-positioning)
     - [Custom Map Styles](#custom-map-styles)
     - [Custom Marker Icons](#custom-marker-icons)
         - [Custom Default Icon](#custom-default-icon)
@@ -453,6 +454,49 @@ Or with a data attribute:
 
 ````html
 <div class="map" data-controls="zoom,fullscreen"></div>
+````
+
+### Map Control Positioning
+
+You can change the default position of the following controls on the map. (the shown values are the defaults)
+
+Possible values: (see [Google Maps reference](https://developers.google.com/maps/documentation/javascript/reference#ControlPosition)
+
+- `'BOTTOM_CENTER'`
+- `'BOTTOM_LEFT'`
+- `'BOTTOM_RIGHT'`
+- `'LEFT_BOTTOM'`
+- `'LEFT_CENTER'`
+- `'LEFT_TOP'`
+- `'RIGHT_BOTTOM'`
+- `'RIGHT_CENTER'`
+- `'RIGHT_TOP'`
+- `'TOP_CENTER'`
+- `'TOP_LEFT'`
+- `'TOP_RIGHT'`
+
+Via javascript:
+
+```javascript
+$('.map').mapify({
+    mapTypeControlPosition: 'TOP_LEFT',
+    zoomControlPosition: 'RIGHT_BOTTOM',
+    fullscreenControlPosition: 'TOP_RIGHT',
+    streetviewControlPosition: 'RIGHT_BOTTOM',
+    rotateControlPosition: 'RIGHT_BOTTOM'
+});
+```
+
+Or with data attributes:
+
+````html
+<div class="map"
+    data-map-type-control-positiom="TOP_LEFT"
+    data-zoom-control-positiom="RIGHT_BOTTOM"
+    data-fullscreen-control-positiom="TOP_RIGHT"
+    data-streetview-control-positiom="RIGHT_BOTTOM"
+    data-rotate-control-positiom="RIGHT_BOTTOM">
+</div>
 ````
 
 ### Custom Map Styles
