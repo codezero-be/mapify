@@ -62,6 +62,16 @@
             iconOrigin: null, //=> optional
             iconAnchor: null, //=> optional
 
+            iconHover: null, //=> marker icon when hovering over it
+            iconHoverSize: null, //=> optional
+            iconHoverOrigin: null, //=> optional
+            iconHoverAnchor: null, //=> optional
+
+            iconOpen: null, //=> marker icon when info window is open
+            iconOpenSize: null, //=> optional
+            iconOpenOrigin: null, //=> optional
+            iconOpenAnchor: null, //=> optional
+
             clusters: true, //=> enable marker clustering?
             clusterTitle: '', //=> browser tooltip when hovering over a cluster icon
             clusterCenter: true, //=> position the cluster icon in the center of the markers or on the first marker
@@ -263,12 +273,19 @@
         },
 
         createMarker: function (markerOptions) {
-            var clickEvent, marker;
+            var clickEvent, marker, markerIcons;
+
+            markerIcons = {
+                default: this.normalizeIcon('icon', markerOptions),
+                hover: this.normalizeIcon('iconHover', markerOptions),
+                open: this.normalizeIcon('iconOpen', markerOptions)
+            };
 
             marker = new google.maps.Marker(
                 this.removeEmptyObjectProperties({
                     position: this.createLatLng(markerOptions.lat, markerOptions.lng),
-                    icon: this.normalizeIcon(markerOptions),
+                    icon: markerIcons.default,
+                    icons: markerIcons,
                     label: markerOptions.label,
                     title: markerOptions.title,
                     infoWindow: markerOptions.infoWindow,
@@ -507,26 +524,39 @@
                 lng: $marker.data('lng'),
                 center: $marker.data('center'),
                 fitbounds: $marker.data('fitbounds'),
+                label: $marker.data('label'),
+                title: $marker.data('title'),
+
                 icon: $marker.data('icon'),
                 iconSize: $marker.data('icon-size'),
                 iconOrigin: $marker.data('icon-origin'),
                 iconAnchor: $marker.data('icon-anchor'),
-                label: $marker.data('label'),
-                title: $marker.data('title'),
+
+                iconHover: $marker.data('icon-hover'),
+                iconHoverSize: $marker.data('icon-hover-size'),
+                iconHoverOrigin: $marker.data('icon-hover-origin'),
+                iconHoverAnchor: $marker.data('icon-hover-anchor'),
+
+                iconOpen: $marker.data('icon-open'),
+                iconOpenSize: $marker.data('icon-open-size'),
+                iconOpenOrigin: $marker.data('icon-open-origin'),
+                iconOpenAnchor: $marker.data('icon-open-anchor'),
+
                 infoWindow: $marker.data('info-window'),
                 infoWindowGroup: $marker.data('info-window-group'),
                 infoWindowOpen: $marker.data('info-window-open'),
                 infoWindowMaxWidth: $marker.data('info-window-max-width'),
+
                 $marker: $marker
             });
         },
 
-        normalizeIcon: function (markerOptions) {
+        normalizeIcon: function (iconType, markerOptions) {
             var icon = this.removeEmptyObjectProperties({
-                url:                         markerOptions.icon       || this.options.icon,
-                scaledSize: this.createSize( markerOptions.iconSize   || this.options.iconSize),
-                origin:     this.createPoint(markerOptions.iconOrigin || this.options.iconOrigin),
-                anchor:     this.createPoint(markerOptions.iconAnchor || this.options.iconAnchor)
+                url:                         markerOptions[iconType]            || this.options[iconType]            || this.options.icon,
+                scaledSize: this.createSize( markerOptions[iconType + 'Size']   || this.options[iconType + 'Size']   || this.options.iconSize),
+                origin:     this.createPoint(markerOptions[iconType + 'Origin'] || this.options[iconType + 'Origin'] || this.options.iconOrigin),
+                anchor:     this.createPoint(markerOptions[iconType + 'Anchor'] || this.options[iconType + 'Anchor'] || this.options.iconAnchor)
             });
 
             return icon.url ? icon : null;
@@ -554,6 +584,16 @@
                 iconSize: this.$map.data('icon-size'),
                 iconOrigin: this.$map.data('icon-origin'),
                 iconAnchor: this.$map.data('icon-anchor'),
+
+                iconHover: this.$map.data('icon-hover'),
+                iconHoverSize: this.$map.data('icon-hover-size'),
+                iconHoverOrigin: this.$map.data('icon-hover-origin'),
+                iconHoverAnchor: this.$map.data('icon-hover-anchor'),
+
+                iconOpen: this.$map.data('icon-open'),
+                iconOpenSize: this.$map.data('icon-open-size'),
+                iconOpenOrigin: this.$map.data('icon-open-origin'),
+                iconOpenAnchor: this.$map.data('icon-open-anchor'),
 
                 panToMarker: this.$map.data('pan-to-marker'),
 
@@ -639,20 +679,38 @@
                 });
             }
 
+            if (marker.icons.open) {
+                marker.setIcon(marker.icons.open);
+            }
+
+            marker.isInfoWindowOpen = true;
+            infoWindow.marker = marker;
             infoWindow.setContent(marker.infoWindow);
             infoWindow.open(this.map, marker);
         },
 
         closeInfoWindows: function (marker) {
-            if (this.infoWindows[marker.infoWindowGroup]) {
-                this.infoWindows[marker.infoWindowGroup].close();
-            }
+            this.closeInfoWindow(this.infoWindows[marker.infoWindowGroup]);
         },
 
         closeAllInfoWindows: function () {
             $.each(this.infoWindows, function (index, infoWindow) {
-                infoWindow.close();
-            });
+                this.closeInfoWindow(infoWindow);
+            }.bind(this));
+        },
+
+        closeInfoWindow: function (infoWindow) {
+            if ( ! infoWindow) {
+                return;
+            }
+
+            if (infoWindow.marker) {
+                infoWindow.marker.isInfoWindowOpen = false;
+                infoWindow.marker.setIcon(infoWindow.marker.icons.default);
+            }
+
+            infoWindow.marker = null;
+            infoWindow.close();
         },
 
         openDefaultInfoWindows: function () {
@@ -831,12 +889,23 @@
                 this.openInfoWindow(marker);
             }
 
+            if (marker.icons.hover) {
+                marker.setIcon(marker.icons.hover);
+            }
+
             this.runUserCallback(this.options.onMarkerMouseEnter, marker, marker, this.map, this.markers, this.clusterer, this.spiderfier, event);
         },
 
         onMarkerMouseLeave: function (marker, event) {
+            var icon;
+
             if (this.options.triggerInfoWindowOnMarker === 'hover') {
                 this.closeInfoWindows(marker);
+            }
+
+            if (marker.icons.hover) {
+                icon = marker.isInfoWindowOpen ? 'open': 'default';
+                marker.setIcon(marker.icons[icon]);
             }
 
             this.runUserCallback(this.options.onMarkerMouseLeave, marker, marker, this.map, this.markers, this.clusterer, this.spiderfier, event);
@@ -854,12 +923,23 @@
 
         onMarkerElementMouseEnter: function (event) {
             var marker = $(event.currentTarget).data('marker');
+
+            if (marker.icons.hover) {
+                marker.setIcon(marker.icons.hover);
+            }
+
             this.handleMarkerElementEvent('hover', marker, event);
             this.runUserCallback(this.options.onMarkerElementMouseEnter, marker, marker, this.map, this.markers, this.clusterer, this.spiderfier, event);
         },
 
         onMarkerElementMouseLeave: function (event) {
-            var marker = $(event.currentTarget).data('marker');
+            var marker = $(event.currentTarget).data('marker'),
+                icon;
+
+            if (marker.icons.hover) {
+                icon = marker.isInfoWindowOpen ? 'open' : 'default';
+                marker.setIcon(marker.icons[icon]);
+            }
 
             if (this.shouldOpenInfoWindowOnElementEvent('hover')) {
                 this.closeInfoWindows(marker);

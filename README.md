@@ -18,6 +18,9 @@
     - [Map Controls](#map-controls)
     - [Custom Map Styles](#custom-map-styles)
     - [Custom Marker Icons](#custom-marker-icons)
+        - [Custom Default Icon](#custom-default-icon)
+        - [Custom Icon on Marker Hover](#custom-icon-on-marker-hover)
+        - [Custom Icon when Info Window is Open](#custom-icon-when-info-window-is-open)
     - [Marker Label and Title](#marker-label-and-title)
 - [Fit Markers on the Map](#fit-markers-on-the-map)
     - [Fit All Markers on the Map](#fit-all-markers-on-the-map)
@@ -468,6 +471,8 @@ $('.map').mapify({
 
 **Default:** standard Google icons
 
+#### Custom Default Icon
+
 To use a custom image as a marker, set one or more of the following options:
 
 ```javascript
@@ -526,6 +531,55 @@ On a marker element:
     </li>
 </ul>
 ````
+
+#### Custom Icon on Marker Hover
+
+You can specify a different marker icon to show when you hover over a marker on the map, or over a marker HTML element.
+The idea is identical to the the previous examples, but you use the following options instead.
+
+If you don't specify the size, origin or anchor, the default (custom) icon settings will be used.
+
+In javascript:
+
+```
+iconHover: '/path/to/marker.png',
+iconHoverSize: '40,40',
+iconHoverOrigin: '0,0',
+iconHoverAnchor: '0,40'
+```
+
+Or use the data attributes:
+
+```
+data-icon-hover="/path/to/marker.png"
+data-icon-hover-size="40,40"
+data-icon-hover-origin="0,0"
+data-icon-hover-anchor="0,40">
+```
+
+#### Custom Icon when Info Window is Open
+
+And another icon can be used when a marker's info window is open.
+
+If you don't specify the size, origin or anchor, the default (custom) icon settings will be used.
+
+In javascript:
+
+```
+iconOpen: '/path/to/marker.png',
+iconOpenSize: '40,40',
+iconOpenOrigin: '0,0',
+iconOpenAnchor: '0,40'
+```
+
+Or use the data attributes:
+
+```
+data-icon-open="/path/to/marker.png"
+data-icon-open-size="40,40"
+data-icon-open-origin="0,0"
+data-icon-open-anchor="0,40">
+```
 
 ### Marker Label and Title
 
