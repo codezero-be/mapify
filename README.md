@@ -49,7 +49,7 @@
     - [Advanced Spiderfier Options](#advanced-spiderfier-options)
 - [Auto Pan to Marker with its HTML Element](#auto-pan-to-marker-with-its-html-element)
 - [Add Class to Marker Element on Hover](#add-class-to-marker-element-on-hover)
-- [Add Class to Marker Element when Info Window Open](#add-class-to-marker-element-when-info-window-open)
+- [Add Class to Marker Element when Info Window is Open](#add-class-to-marker-element-when-info-window-is-open)
 - [Info Window](#info-window)
     - [Inline Info Window](#inline-info-window)
     - [Info Window via Selector](#info-window-via-selector)
@@ -1114,7 +1114,7 @@ With a data attribute:
 <div class="map" data-hover-class="marker-hover"></div>
 ```
 
-## Add Class to Marker Element when Info Window Open
+## Add Class to Marker Element when Info Window is Open
 
 **Default:** `null`
 
