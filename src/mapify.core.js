@@ -205,18 +205,18 @@
             // The map and marker parameters are the Google Map and Marker objects.
             // You can access the related .map and .marker DOM elements as jQuery objects
             // via the property map.$map and marker.$marker
-            onInitialized:             function (map, markers, clusterer, spiderfier) { },
-            onMapClick:                function (map, markers, clusterer, spiderfier, event) { },
-            onMarkerClick:             function (marker, map, markers, clusterer, spiderfier, event) { },
-            onMarkerMouseEnter:        function (marker, map, markers, clusterer, spiderfier, event) { },
-            onMarkerMouseLeave:        function (marker, map, markers, clusterer, spiderfier, event) { },
-            onMarkerElementClick:      function (marker, map, markers, clusterer, spiderfier, event) { },
-            onMarkerElementMouseEnter: function (marker, map, markers, clusterer, spiderfier, event) { },
-            onMarkerElementMouseLeave: function (marker, map, markers, clusterer, spiderfier, event) { },
-            onClusterClick:            function (clusterMarkers, cluster, map, markers, clusterer, spiderfier) { },
-            onClusterMouseEnter:       function (clusterMarkers, cluster, map, markers, clusterer, spiderfier) { },
-            onClusterMouseLeave:       function (clusterMarkers, cluster, map, markers, clusterer, spiderfier) { },
-            onSpiderMarkerFormat:      function (marker, markerStatus, map, markers, clusterer, spiderfier) { }
+            onInitialized:             null, // function (map, markers, clusterer, spiderfier) { },
+            onMapClick:                null, // function (map, markers, clusterer, spiderfier, event) { },
+            onMarkerClick:             null, // function (marker, map, markers, clusterer, spiderfier, event) { },
+            onMarkerMouseEnter:        null, // function (marker, map, markers, clusterer, spiderfier, event) { },
+            onMarkerMouseLeave:        null, // function (marker, map, markers, clusterer, spiderfier, event) { },
+            onMarkerElementClick:      null, // function (marker, map, markers, clusterer, spiderfier, event) { },
+            onMarkerElementMouseEnter: null, // function (marker, map, markers, clusterer, spiderfier, event) { },
+            onMarkerElementMouseLeave: null, // function (marker, map, markers, clusterer, spiderfier, event) { },
+            onClusterClick:            null, // function (clusterMarkers, cluster, map, markers, clusterer, spiderfier) { },
+            onClusterMouseEnter:       null, // function (clusterMarkers, cluster, map, markers, clusterer, spiderfier) { },
+            onClusterMouseLeave:       null, // function (clusterMarkers, cluster, map, markers, clusterer, spiderfier) { },
+            onSpiderMarkerFormat:      null  // function (marker, markerStatus, map, markers, clusterer, spiderfier) { }
         };
 
     function Plugin (mapContainer, options) {

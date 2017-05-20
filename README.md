@@ -62,6 +62,7 @@
     - [Open Info Window on Click or Hover (Marker Object)](#open-info-window-on-click-or-hover-marker-object)
     - [Open Info Window on Click or Hover (Marker Element)](#open-info-window-on-click-or-hover-marker-element)
     - [Close Info Windows on Map Click](#close-info-windows-on-map-click)
+- [Events](#events)
 
 ## Third Party Libraries
 
@@ -1459,3 +1460,47 @@ With a data attribute:
 ```
 
 > I know... this data attribute is getting out of hand... :) But I can't shorten it AND keep it descriptive... Luckily the javascript version looks cleaner!
+
+## Events
+
+If you need to run some extra logic when certain events occur, you can add the following callback options...
+Each callback receives a few variables with map and marker details, depending on the event.
+
+An overview of all possible arguments:
+
+Argument | Description
+---------|------------
+`map` | The Google Maps `Map` instance
+`markers` | Array of all `Marker` instances on the map
+`marker` | `Marker` instance (relevant to the event)
+`clusterer` | `MarkerClusterer` instance
+`cluster` | `Cluster` instance (relevant to the event)
+`clusterMarkers` | Array of `Marker` instances in a cluster (relevant to the event)
+`spiderfier` | `OverlappingMarkerSpiderfier` instance
+`markerStatus` | Spiderfier marker status
+`event` | Original event
+
+You can also get to the map or marker HTML element (if any) very easily:
+
+`map.$map`: the map div
+`marker.$marker`: the marker HTML element, if you created it
+
+These are the events you can interact with:
+
+Event                     | Parameters
+--------------------------|-----------
+onInitialized             | function (map, markers, clusterer, spiderfier) { }
+onMapClick                | function (map, markers, clusterer, spiderfier, event) { }
+onMarkerClick             | function (marker, map, markers, clusterer, spiderfier, event) { }
+onMarkerMouseEnter        | function (marker, map, markers, clusterer, spiderfier, event) { }
+onMarkerMouseLeave        | function (marker, map, markers, clusterer, spiderfier, event) { }
+onMarkerElementClick      | function (marker, map, markers, clusterer, spiderfier, event) { }
+onMarkerElementMouseEnter | function (marker, map, markers, clusterer, spiderfier, event) { }
+onMarkerElementMouseLeave | function (marker, map, markers, clusterer, spiderfier, event) { }
+onClusterClick            | function (clusterMarkers, cluster, map, markers, clusterer, spiderfier) { }
+onClusterMouseEnter       | function (clusterMarkers, cluster, map, markers, clusterer, spiderfier) { }
+onClusterMouseLeave       | function (clusterMarkers, cluster, map, markers, clusterer, spiderfier) { }
+onSpiderMarkerFormat      | function (marker, markerStatus, map, markers, clusterer, spiderfier) { } 
+
+The `onInitialized` callback is triggered when the map is fully loaded.
+If you wish to manipulate the map, markers or anything else in a way that is not supported by the plugin, this might be the place to do it.
