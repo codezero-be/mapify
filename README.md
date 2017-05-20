@@ -1,5 +1,9 @@
 # Mapify - Google Maps jQuery Plugin
 
+[![npm](https://img.shields.io/npm/v/codezero-mapify.svg)](https://www.npmjs.com/package/codezero-mapify)
+[![npm](https://img.shields.io/npm/dt/codezero-mapify.svg)](https://www.npmjs.com/package/codezero-mapify)
+[![npm](https://img.shields.io/npm/l/codezero-mapify.svg)](https://www.npmjs.com/package/codezero-mapify)
+
 ## Contents
 
 - [Third Party Libraries](#third-party-libraries)
@@ -1504,3 +1508,21 @@ onSpiderMarkerFormat      | function (marker, markerStatus, map, markers, cluste
 
 The `onInitialized` callback is triggered when the map is fully loaded.
 If you wish to manipulate the map, markers or anything else in a way that is not supported by the plugin, this might be the place to do it.
+
+## Development
+I am using a tool called [Laravel Mix](https://github.com/JeffreyWay/laravel-mix) to compile javascript and SCSS.
+Make sure you have the latest version of [NodeJS](https://nodejs.org/en/) installed and then run `npm install`.
+
+- To compile run `npm run dev`.
+- To compile and watch for changes run `npm run watch`.
+- To compile for production (minify/uglify) run `npm run production`.
+
+## Changelog
+
+View the [changelog](https://github.com/codezero-be/mapify/blob/master/CHANGELOG.md).
+
+## License
+The MIT License (MIT). Please see [License File](https://github.com/codezero-be/mapify/blob/master/LICENSE.md) for more information.
+
+---
+[![Analytics](https://ga-beacon.appspot.com/UA-58876018-1/codezero-be/mapify)](https://github.com/igrigorik/ga-beacon)
