@@ -307,10 +307,7 @@
             // Get any info window content so we don't need to fetch it every time
             marker.infoWindow = this.getInfoWindowContent(marker);
 
-            // Create an InfoWindow instance for the specified group if it does not already exist
-            if (marker.infoWindow !== null && this.infoWindows[marker.infoWindowGroup] === undefined) {
-                this.infoWindows[marker.infoWindowGroup] = new google.maps.InfoWindow();
-            }
+            this.createInfoWindow(marker);
 
             // When fitbounds is true for a specific marker,
             // and global fitbounds is also still true (by default),
@@ -666,6 +663,23 @@
         //
         // Info Window
         //
+
+        createInfoWindow: function (marker) {
+            var infoWindow;
+
+            // Create an InfoWindow instance for the specified group if it does not already exist
+            if (marker.infoWindow === null || this.infoWindows[marker.infoWindowGroup] !== undefined) {
+                return;
+            }
+
+            infoWindow = new google.maps.InfoWindow();
+
+            infoWindow.addListener('closeclick', function () {
+                this.closeInfoWindow(infoWindow);
+            }.bind(this));
+
+            this.infoWindows[marker.infoWindowGroup] = infoWindow;
+        },
 
         openInfoWindow: function (marker) {
             var infoWindow, maxWidth;
