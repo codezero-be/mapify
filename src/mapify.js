@@ -1,3 +1,3 @@
 require('./vendor/markerclusterer');
-require('./vendor/oms');
-require('mapify.core');
+require('./vendor/oms.min');
+require('./mapify.core');
