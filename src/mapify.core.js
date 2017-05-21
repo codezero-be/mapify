@@ -1,4 +1,5 @@
-/*!
+/**
+ * @license
  * Mapify - Google Maps jQuery Plugin
  * by Ivan Vermeyen
  *
