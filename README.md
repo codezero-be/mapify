@@ -1470,7 +1470,7 @@ With a data attribute:
 If you need to run some extra logic when certain events occur, you can add the following callback options...
 Each callback receives a few variables with map and marker details, depending on the event.
 
-An overview of all possible arguments:
+#### An overview of all possible arguments:
 
 Argument | Description
 ---------|------------
@@ -1484,12 +1484,13 @@ Argument | Description
 `markerStatus` | Spiderfier marker status
 `event` | Original event
 
-You can also get to the map or marker HTML element (if any) very easily:
+#### You can also get to the map or marker HTML element (if any) very easily:
 
 `map.$map`: the map div
+
 `marker.$marker`: the marker HTML element, if you created it
 
-These are the events you can interact with:
+#### These are the events you can interact with:
 
 Event                     | Parameters
 --------------------------|-----------
@@ -1506,7 +1507,7 @@ onClusterMouseEnter       | function (clusterMarkers, cluster, map, markers, clu
 onClusterMouseLeave       | function (clusterMarkers, cluster, map, markers, clusterer, spiderfier) { }
 onSpiderMarkerFormat      | function (marker, markerStatus, map, markers, clusterer, spiderfier) { } 
 
-The `onInitialized` callback is triggered when the map is fully loaded.
+> The `onInitialized` callback is triggered when the map is fully loaded.
 If you wish to manipulate the map, markers or anything else in a way that is not supported by the plugin, this might be the place to do it.
 
 ## Development
