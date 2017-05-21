@@ -3,6 +3,8 @@ let glob = require('glob');
 let webpack = require('webpack');
 let Mix = require('laravel-mix').config;
 let webpackPlugins = require('laravel-mix').plugins;
+let fs = require('fs');
+let WrapperPlugin = require('wrapper-webpack-plugin');
 
 /*
  |--------------------------------------------------------------------------
@@ -410,6 +412,12 @@ plugins.push(
 if (! Mix.entry().hasScripts()) {
     plugins.push(new webpackPlugins.MockEntryPlugin(Mix.output().path));
 }
+
+plugins.push(
+    new WrapperPlugin({
+        header: fs.readFileSync('./src/license.js', 'utf8')
+    })
+);
 
 module.exports.plugins = plugins;
 

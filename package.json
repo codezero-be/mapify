@@ -19,6 +19,7 @@
   "author": "Ivan Vermeyen",
   "license": "MIT",
   "devDependencies": {
-    "laravel-mix": "^0.10.0"
+    "laravel-mix": "^0.10.0",
+    "wrapper-webpack-plugin": "^0.1.11"
   }
 }
