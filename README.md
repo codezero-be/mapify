@@ -67,6 +67,9 @@
     - [Open Info Window on Click or Hover (Marker Element)](#open-info-window-on-click-or-hover-marker-element)
     - [Close Info Windows on Map Click](#close-info-windows-on-map-click)
 - [Events](#events)
+- [Development](#development)
+- [Changelog](#changelog)
+- [License](#licemse)
 
 ## Third Party Libraries
 
