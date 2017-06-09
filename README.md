@@ -664,7 +664,7 @@ Or on the marker element:
         data-lat="51.251245"
         data-lng="4.497890"
         data-label="A"
-        data-titla="Some more information...">
+        data-title="Some more information...">
         Marker A
     </li>
 </ul>
