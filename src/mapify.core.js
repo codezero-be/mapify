@@ -40,6 +40,8 @@
             lng: null,
             centerLat: null,
             centerLng: null,
+            label: null,
+            title: null,
             backgroundColor: '#ffffff', //=> background color of the map, visible when tiles are not yet loaded
 
             // Possible map types: (accepts an array or comma separated string)
@@ -334,15 +336,18 @@
 
             marker = new google.maps.Marker(
                 this.removeEmptyObjectProperties({
-                    position: this.createLatLng(markerOptions.lat, markerOptions.lng),
+                    position: this.createLatLng(
+                        markerOptions.lat || this.options.lat,
+                        markerOptions.lng || this.options.lng
+                    ),
                     icon: markerIcons.default,
                     icons: markerIcons,
-                    label: markerOptions.label,
-                    title: markerOptions.title,
-                    infoWindow: markerOptions.infoWindow,
+                    label: markerOptions.label || this.options.label,
+                    title: markerOptions.title || this.options.title,
+                    infoWindow: markerOptions.infoWindow || this.options.infoWindow,
                     infoWindowGroup: markerOptions.infoWindowGroup || 'default',
-                    infoWindowOpen: markerOptions.infoWindowOpen,
-                    infoWindowMaxWidth: markerOptions.infoWindowMaxWidth,
+                    infoWindowOpen: markerOptions.infoWindowOpen || this.options.infoWindowOpen,
+                    infoWindowMaxWidth: markerOptions.infoWindowMaxWidth || this.options.infoWindowMaxWidth,
                     map: this.map
                 })
             );

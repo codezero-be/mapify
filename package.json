@@ -1,6 +1,6 @@
 {
   "name": "codezero-mapify",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Mapify - Google Maps jQuery Plugin",
   "main": "dist/mapify.min.js",
   "scripts": {
