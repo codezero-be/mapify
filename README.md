@@ -98,6 +98,12 @@ bower install codezero-mapify --save
 npm install codezero-mapify --save
 ```
 
+### Use CDN
+
+```html
+<script src="https://unpkg.com/codezero-mapify@1.0.1/dist/mapify.min.js"></script>
+```
+
 ### Include Scripts
 
 You probably want to [create an API key](https://developers.google.com/maps/documentation/javascript/get-api-key) to work with the Google Maps API. You can use the API without a key, but there will be a warning in the console window and I don't know what restrictions apply.
@@ -1475,17 +1481,17 @@ Each callback receives a few variables with map and marker details, depending on
 
 #### An overview of all possible arguments:
 
-Argument | Description
----------|------------
-`map` | The Google Maps `Map` instance
-`markers` | Array of all `Marker` instances on the map
-`marker` | `Marker` instance (relevant to the event)
-`clusterer` | `MarkerClusterer` instance
-`cluster` | `Cluster` instance (relevant to the event)
-`clusterMarkers` | Array of `Marker` instances in a cluster (relevant to the event)
-`spiderfier` | `OverlappingMarkerSpiderfier` instance
-`markerStatus` | Spiderfier marker status
-`event` | Original event
+| Argument         | Description                              |
+| ---------------- | ---------------------------------------- |
+| `map`            | The Google Maps `Map` instance           |
+| `markers`        | Array of all `Marker` instances on the map |
+| `marker`         | `Marker` instance (relevant to the event) |
+| `clusterer`      | `MarkerClusterer` instance               |
+| `cluster`        | `Cluster` instance (relevant to the event) |
+| `clusterMarkers` | Array of `Marker` instances in a cluster (relevant to the event) |
+| `spiderfier`     | `OverlappingMarkerSpiderfier` instance   |
+| `markerStatus`   | Spiderfier marker status                 |
+| `event`          | Original event                           |
 
 #### You can also get to the map or marker HTML element (if any) very easily:
 
@@ -1495,23 +1501,23 @@ Argument | Description
 
 #### These are the events you can interact with:
 
-Event                     | Parameters
---------------------------|-----------
-onInitialized             | function (map, markers, clusterer, spiderfier) { }
-onMapClick                | function (map, markers, clusterer, spiderfier, event) { }
-onMarkerClick             | function (marker, map, markers, clusterer, spiderfier, event) { }
-onMarkerMouseEnter        | function (marker, map, markers, clusterer, spiderfier, event) { }
-onMarkerMouseLeave        | function (marker, map, markers, clusterer, spiderfier, event) { }
-onMarkerElementClick      | function (marker, map, markers, clusterer, spiderfier, event) { }
-onMarkerElementMouseEnter | function (marker, map, markers, clusterer, spiderfier, event) { }
-onMarkerElementMouseLeave | function (marker, map, markers, clusterer, spiderfier, event) { }
-onClusterClick            | function (clusterMarkers, cluster, map, markers, clusterer, spiderfier) { }
-onClusterMouseEnter       | function (clusterMarkers, cluster, map, markers, clusterer, spiderfier) { }
-onClusterMouseLeave       | function (clusterMarkers, cluster, map, markers, clusterer, spiderfier) { }
-onSpiderMarkerFormat      | function (marker, markerStatus, map, markers, clusterer, spiderfier) { } 
+| Event                     | Parameters                               |
+| ------------------------- | ---------------------------------------- |
+| onInitialized             | function (map, markers, clusterer, spiderfier) { } |
+| onMapClick                | function (map, markers, clusterer, spiderfier, event) { } |
+| onMarkerClick             | function (marker, map, markers, clusterer, spiderfier, event) { } |
+| onMarkerMouseEnter        | function (marker, map, markers, clusterer, spiderfier, event) { } |
+| onMarkerMouseLeave        | function (marker, map, markers, clusterer, spiderfier, event) { } |
+| onMarkerElementClick      | function (marker, map, markers, clusterer, spiderfier, event) { } |
+| onMarkerElementMouseEnter | function (marker, map, markers, clusterer, spiderfier, event) { } |
+| onMarkerElementMouseLeave | function (marker, map, markers, clusterer, spiderfier, event) { } |
+| onClusterClick            | function (clusterMarkers, cluster, map, markers, clusterer, spiderfier) { } |
+| onClusterMouseEnter       | function (clusterMarkers, cluster, map, markers, clusterer, spiderfier) { } |
+| onClusterMouseLeave       | function (clusterMarkers, cluster, map, markers, clusterer, spiderfier) { } |
+| onSpiderMarkerFormat      | function (marker, markerStatus, map, markers, clusterer, spiderfier) { } |
 
 > The `onInitialized` callback is triggered when the map is fully loaded.
-If you wish to manipulate the map, markers or anything else in a way that is not supported by the plugin, this might be the place to do it.
+> If you wish to manipulate the map, markers or anything else in a way that is not supported by the plugin, this might be the place to do it.
 
 ## Development
 I am using a tool called [Laravel Mix](https://github.com/JeffreyWay/laravel-mix) to compile javascript and SCSS.
